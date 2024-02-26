@@ -1,92 +1,252 @@
-# voicegenerate
+## Env Suggest
+**Node >= 18**
+
+**pnpm 8**
+
+**Registry taobao - https://registry.npmmirror.com/**
+
+## Use This Template
+```sh
+npx degit atqq/uni-vue3-ts-template#main my-uni-vue3-ts-vite-project
+```
+## Feature
+### Prod
+* [x] [Vue3](https://vuejs.org/)
+* [x] [Pinia](https://pinia.vuejs.org/) - replace vuex
+* [x] [Axios](https://github.com/axios/axios)
+* UI/组件库
+  * [x] [uView](https://vkuviewdoc.fsq.pub/) - vk-uview-ui
+  * [ ] [uni-ui](https://github.com/dcloudio/uni-ui) - 待接入
+### Dev
+* [x] [Vite](https://github.com/vitejs/vite)
+* [x] [TypeScript](https://github.com/microsoft/TypeScript/#readme)
+* [x] [Sass](https://github.com/sass/sass)
+* [x] [Less](https://github.com/less/less.js)
+* [x] [Eslint](https://eslint.org/)
+* [x] [Prettier](https://prettier.io/)
+* [x] [Vitest](https://vitest.dev/) - replace jest
+* [x] [unocss](https://github.com/unocss/unocss) - 即时按需原子 css 引擎
+* [x] GitHooks [simple-git-hooks](https://github.com/toplenboren/simple-git-hooks#readme)
+* ~~LintStaged~~
+* ~~StyleLint~~
+
+## 使用
+### 安装依赖
+**建议使用pnpm，依赖安装速度更快**
+```sh
+npm i -g pnpm
+```
+
+```sh
+pnpm install
+```
+
+**MAC M1(ARM芯片)，其它操作系统无需关注**，正常运行需要手动安装 `esbuild-darwin-64`即可
+```sh
+pnpm add @esbuild/darwin-x64@0.18.20 -D
+```
+安装的版本或者指令可以运行下面这个脚本获取
+```sh
+node arm-esbuild-version.js
+
+# 或者
+pnpm mac:m1:esbuild
+```
+![](https://img.cdn.sugarat.top/mdImg/MTY5NDk1ODQ0Njk1Ng==694958446956)
+
+
+## 本地启动
+### 微信小程序
+```sh
+# 构建出产物
+pnpm dev:mp-weixin
+```
+
+> **Q1：** 如果dev的时候发现报错，可以尝试删除`node_modules`之后再在命令行中运行`pnpm install --shamefully-hoist`重新安装依赖再`pnpm dev:mp-weixin`
+>
+> [详细参考文档](https://pnpm.io/zh/faq#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%883)
+
+> **Q2：** 如果运行白屏，有报错信息 “app.js错误ReferenceError: regeneratorRuntime is not defined”
+> 
+> 参考[解决方案](https://blog.csdn.net/FUFCY/article/details/125160828) 给微信小程序IDE开启**增强编译选项**
+
+然后将编译结果`dist/dev/mp-weixin`导入微信开发者工具即可运行
+
+<details>
+<summary>点击查看 导入详细步骤</summary>
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTYzNzQxNjc3MjA4Mw==637416772083)
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTYzNzQxNjg4MTUwNA==637416881504)
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTYzNzQxNjY3OTY0NQ==637416679645)
+
+</details>
+
+>Q3：真机运行白屏，模拟器，开发环境都正常
+>
+>参考[issue 25](https://github.com/ATQQ/uni-vue3-ts-template/issues/25)，使用build 生产的资源进行真机调试就可以了
+
+### H5
+```sh
+# CSR
+pnpm dev:h5
+```
+
+根据提示，打开对应地址即可访问
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxMTE0MDEzMg==653211140132)
+
+### App
+>**Q1：** 如启动到App侧有报错？
+><span style="color:red;">请更新至最新的HBuilderX-Alpha客户端</span>
+#### 安装一些必要工具
+需要使用 `uni-app` 官方提供的 [HBuilderX](https://www.dcloud.io/hbuilderx.html) 启动项目
+
+**Android模拟器在MacOSX、Windows上都可以安装；iOS模拟器只能在MacOSX上安装。**
+
+先安装相关模拟器，[详细参考文档](https://hx.dcloud.net.cn/Tutorial/App/installSimulator)
+* 安卓：[夜神模拟器](https://www.yeshen.com/blog/)
+* iOS：Mac上安装Xcode
+
+准备就绪后，使用 HBuilderX 打开项目
+#### iOS模拟器运行
+通过顶部菜单栏，找到运行入口
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxMjk1MTgzNw==653212951837)
+
+选择一个目标设备，点击启动即可
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxMjk3NDM0NQ==653212974345)
+
+#### Android模拟器运行
+这里以[夜神模拟器](https://www.yeshen.com/blog/)为例
+
+<details>
+<summary>点击查看 详细步骤</summary>
+
+先通过 HBuilderX 修改模拟器端口为 `62001`
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxNDAzMjIwNg==653214032206)
+
+打开夜神模拟器
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxNDA5OTYxNg==653214099616)
+
+选择运行到 Android 基座
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxNDEzMzI0OA==653214133248)
+
+选择已经打开的模拟器，点击运行即可
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxNDIxNjczNw==653214216737)
+
+![图片](https://img.cdn.sugarat.top/mdImg/MTY1MzIxMzkyOTQxNg==653213929416)
+
+</details>
+
+
+## 打包构建
+### 微信小程序
+```
+pnpm build:mp-weixin
+```
+### H5
+```sh
+# CSR
+pnpm build:h5
+```
+
+### App
+基于 `HBuilderX` 参考[官方文档](https://hx.dcloud.net.cn/Tutorial/App/SafePack)进行进一步的操作
+
+其它更多运行脚本 查看 [package.json](./package.json)中的scripts
+
+## css预处理
+
+### 已配置`scss`和`less`全局变量
+```typescript
+// vite.config.ts
+export default defineConfig({
+  // ......
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "@/static/styles/variables.scss";'
+      },
+      less: {
+        additionalData: '@import "@/static/styles/variables.less";'
+      }
+    }
+  }
+})
+```
 
 
 
-## Getting started
+`additionalData`的值是文件的路径，可以按照自己业务需求去修改，**如果项目样式变量分的比较细，可以使用一个样式文件引入多个变量样式文件，然后在这里引入入口文件**
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
+## 别名配置
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+如果我们想要在`import`的时候 src 的路径简写成`@`，下面的就是配置 vite 的别名，[属性类型请查看vite文档](https://vitejs.cn/config/#resolve-alias)
+
+- `@` 代替 `./src`
+- `@components`代替`./src/components`
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  // ......
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components')
+    }
+  }
+})
+```
+
+例子：
+
+```diff
+// pages/index/index.vue
+- import Hello from '../../components/hello/index.vue'
++ import Hello from '@/components/hello/index.vue'
+// 或者
++ import Hello from '@components/hello/index.vue'
+```
+
+
+
+### ts
+
+如果是使用ts开发，这样还不够，ts不会识别路径的别名，显示找不到模块的报错，这个时候需要修改 `tsconfig.json` 文件，纠正下路径才可以。
+
+
+
+```diff
+// tsconfig.json
+{
+  // ......
+  "compilerOptions": {
+    // ......
++    "baseUrl": "./",
++    "paths": {
++      "@/*": ["src/*"],
++      "@components/*": ["src/components/*"]
+    }
+  },
+}
 
 ```
-cd existing_repo
-git remote add origin http://192.168.0.10/front-end/voicegenerate.git
-git branch -M main
-git push -uf origin main
-```
 
-## Integrate with your tools
+添加 `baseUrl` 和 `paths` 参数，就可以完美解决编辑器的报错提示了！
 
-- [ ] [Set up project integrations](http://192.168.0.10/front-end/voicegenerate/-/settings/integrations)
+## 原子化css
+* [unocss](https://github.com/unocss/unocss) - 即时按需原子 css 引擎
+* [unocss-preset-weapp](https://github.com/MellowCo/unocss-preset-weapp) - 兼容小程序 unocss 预设
 
-## Collaborate with your team
+> 支持小程序，h5，app
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+![](https://fastly.jsdelivr.net/gh/MellowCo/image-host/2022/202211121156442.png)
