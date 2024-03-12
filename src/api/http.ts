@@ -46,7 +46,7 @@ instance.interceptors.request.use((config) => {
   const { method, params } = config
   // 附带鉴权的token
   const headers: any = {
-    token: uni.getStorageSync('token')
+    Authorization: uni.getStorageSync('token')
   }
   // 不缓存get请求
   if (method === 'get') {

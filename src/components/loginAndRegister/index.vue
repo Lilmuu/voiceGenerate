@@ -1,17 +1,21 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { mineApi } from '@/api'
+import { userStore } from '@/store/index'
+
+const user = userStore()
 
 const loginForm = ref({
-  username: '',
+  phone: '',
   password: ''
 })
 
 const uToastRef = ref()
 
-const login = () => {
+const login = async () => {
   if (
     loginForm.value.password.length === 0 ||
-    loginForm.value.username.length === 0
+    loginForm.value.phone.length === 0
   ) {
     return uni.showToast({
       title: `账号或密码不能为空`,
@@ -19,13 +23,28 @@ const login = () => {
       position: 'bottom'
     })
   }
-}
-
-const demo = () => {
-  uni.setStorageSync('token', 'hello')
-  uni.switchTab({
-    url: '/pages/index/index'
-  })
+  const res = (await mineApi.login(loginForm.value)) as any
+  console.log(res)
+  if (res.status === 401) {
+    return uni.showToast({
+      title: '账号或密码错误',
+      icon: 'none',
+      position: 'bottom'
+    })
+  }
+  if (res.status === 200) {
+    user.userInfo = res.user_data
+    uni.setStorageSync('token', res.access_token_key)
+    uni.setStorageSync('userInfo', res.user_data)
+    uni.switchTab({
+      url: '/pages/index/index'
+    })
+    return uni.showToast({
+      title: '登录成功',
+      icon: 'none',
+      position: 'bottom'
+    })
+  }
 }
 </script>
 
@@ -35,10 +54,11 @@ const demo = () => {
       <view class="mt4 color-white font-700 mb8">账号密码登录</view>
       <view class="form-box p-2">
         <u-form :model="loginForm">
-          <u-form-item prop="loginForm.username">
+          <u-form-item prop="loginForm.phone">
             <u-input
               border="none"
               color="#cccccc"
+              v-model="loginForm.phone"
               placeholder="请输入您的用户名"
             ></u-input>
           </u-form-item>
@@ -46,6 +66,7 @@ const demo = () => {
             <u-input
               border="none"
               color="#cccccc"
+              v-model="loginForm.password"
               placeholder="请输入您的密码"
             ></u-input>
           </u-form-item>
@@ -56,7 +77,6 @@ const demo = () => {
         <view class="accord flex mt4">
           <text class="text">我已阅读并同意《服务条款》《隐私政策》</text>
         </view>
-        <u-button @click="demo">测试登录</u-button>
       </view>
     </view>
     <u-toast ref="uToastRef"></u-toast>

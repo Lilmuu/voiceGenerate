@@ -1,13 +1,29 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { mineApi } from '@/api/index'
 const params = ref({
-  pageSize: 10,
-  pageNum: 1
+  page_size: 10,
+  page: 1
 })
+
+// 获取消费记录
+const getRecordList = async () => {
+  const res = await mineApi.consumptionList(params.value)
+  console.log(res)
+}
+
+// 加载更多
+const loadMore = () => {
+  getRecordList()
+}
 
 const recordList = ref([])
 
 const total = ref(0)
+
+onMounted(() => {
+  getRecordList()
+})
 </script>
 
 <template>
@@ -21,11 +37,8 @@ const total = ref(0)
       title="消耗记录"
     >
     </u-navbar>
-    <view class="content-box pl pr">
-      <u-cell title="单元格" value="内容" label="描述信息"></u-cell>
-      <u-cell title="单元格" value="内容" label="描述信息"></u-cell>
-      <u-cell title="单元格" value="内容" label="描述信息"></u-cell>
-    </view>
+    <scroll-view scroll-y="true" class="scroll-Y" @scrolltolower="loadMore">
+    </scroll-view>
   </view>
 </template>
 

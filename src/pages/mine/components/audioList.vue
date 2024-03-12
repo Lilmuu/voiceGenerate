@@ -1,9 +1,34 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, Ref } from 'vue'
+import { onMounted } from 'vue'
+import { mineApi } from '@/api/'
+import { audioList } from '../type/index'
+import { AudioControl } from '@/utils/audio'
 
-const audioList = ref([])
+const audioList: Ref<Array<audioList>> = ref([])
 
 const total = ref(0)
+
+const queryAudioListAPI: () => Promise<void> = async () => {
+  const res = await mineApi.queryAudioList({ user_id: 1 })
+  audioList.value = res.data
+}
+
+// 下载音频
+const downLoadFile = (url: string) => {
+  uni.downloadFile({
+    url,
+    success: (res) => {
+      if (res.statusCode === 200) {
+        console.log('下载成功')
+      }
+    }
+  })
+}
+
+onMounted(() => {
+  queryAudioListAPI()
+})
 </script>
 
 <template>
@@ -18,21 +43,38 @@ const total = ref(0)
     >
     </u-navbar>
     <div class="content-box pl pr">
-      <u-collapse>
-        <u-collapse-item title="文档指南" name="Docs guide">
-          <text class="u-collapse-content"
-            >涵盖uniapp各个方面，给开发者方向指导和设计理念，让您茅塞顿开，一马平川</text
-          >
-        </u-collapse-item>
-        <u-collapse-item title="组件全面" name="Variety components">
-          <text class="u-collapse-content"
-            >众多组件覆盖开发过程的各个需求，组件功能丰富，多端兼容。让您快速集成，开箱即用</text
-          >
-        </u-collapse-item>
-        <u-collapse-item title="众多利器" name="Numerous tools">
-          <text class="u-collapse-content"
-            >众多的贴心小工具，是您开发过程中召之即来的利器，让您飞镖在手，百步穿杨</text
-          >
+      <u-collapse accordion>
+        <u-collapse-item
+          v-for="item in audioList"
+          :key="item.id"
+          :title="item.title"
+          :name="item.title"
+        >
+          <div class="audio-list">
+            <div v-for="child in item.data" :key="child.id" class="audio-item">
+              <div class="intro-box">
+                <div class="title">{{ child.role }}</div>
+                <up-text :lines="2" :text="child.text"></up-text>
+              </div>
+              <div class="btn-box">
+                <up-button
+                  size="small"
+                  class="mr-2"
+                  type="success"
+                  shape="circle"
+                  @click="AudioControl.addChooseAudio(child.id, child.audioUrl)"
+                  text="试听"
+                ></up-button>
+                <up-button
+                  size="small"
+                  shape="circle"
+                  type="primary"
+                  text="下载"
+                  @click="downLoadFile(child.audioUrl)"
+                ></up-button>
+              </div>
+            </div>
+          </div>
         </u-collapse-item>
       </u-collapse>
     </div>
@@ -44,6 +86,25 @@ const total = ref(0)
   height: 100vh;
   .content-box {
     height: calc(100vh - 40px);
+    .audio-list {
+      width: 100%;
+      .audio-item {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 20rpx;
+        .intro-box {
+          width: 55%;
+          .title {
+            padding-bottom: 10rpx;
+          }
+        }
+        .btn-box {
+          display: flex;
+          align-items: center;
+          width: 45%;
+        }
+      }
+    }
   }
 }
 </style>
