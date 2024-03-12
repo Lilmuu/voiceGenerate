@@ -1,4 +1,8 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+const jumpTo = (url: string) => {
+  uni.navigateTo({ url: url })
+}
+</script>
 
 <template>
   <view class="mine-box">
@@ -32,9 +36,11 @@
         </view>
         <view class="btn-box">
           <u-button
+            @click="jumpTo('components/recharge')"
             shape="circle"
+            size="small"
             color="linear-gradient(to right,  rgb(167, 95, 55),rgb(137, 76, 38))"
-            >立即开通</u-button
+            >充值</u-button
           >
         </view>
       </view>
@@ -42,19 +48,50 @@
     <view class="content-box pl4 pr4">
       <!-- 数字资产 -->
       <view class="property flex mt2 border-rd">
-        <view class="digital flex-col flex justify-between p-3">
+        <view
+          @click="jumpTo('components/digitalAssets')"
+          class="digital flex-col flex justify-between p-3"
+        >
           <view class="fw700 title">数字资产</view>
           <view>去查看</view>
         </view>
         <view class="border mt2 mb2"></view>
-        <view class="card-holder flex-col flex justify-between p-3">
-          <view class="fw700 title">我的卡包</view>
+        <view
+          @click="jumpTo('components/order')"
+          class="card-holder flex-col flex justify-between p-3"
+        >
+          <view class="fw700 title">我的订单</view>
           <view>去查看</view>
         </view>
       </view>
       <!-- 常用功能 -->
       <view class="common-box mt4 border-rd p-3">
-        <view class="fw700"> 常用功能 </view>
+        <view class="fw700 mb2">常用功能</view>
+        <view class="flex common-btn-list">
+          <view class="common-item" @click="jumpTo('components/audioList')"
+            >合成列表</view
+          >
+          <view class="common-item" @click="jumpTo('components/consumeRecord')"
+            >消耗记录</view
+          >
+        </view>
+      </view>
+      <!-- 系统设置 -->
+      <view class="system-box mt4 border-rd p-3">
+        <u-cell-group :border="false">
+          <u-cell
+            :border="false"
+            icon="integral-fill"
+            title="联系客服"
+            isLink
+          ></u-cell>
+          <u-cell
+            :border="false"
+            icon="integral-fill"
+            title="系统设置"
+            isLink
+          ></u-cell>
+        </u-cell-group>
       </view>
     </view>
   </view>
@@ -64,9 +101,8 @@
 .mine-box {
   min-height: calc(100vh - 100rpx);
   background-color: #f5f6fa;
-  box-sizing: border-box;
   .header-box {
-    height: 320rpx;
+    height: 340rpx;
     width: 100%;
     background-color: #16162e;
     .userInfo {
@@ -81,14 +117,10 @@
       font-size: 0.75rem;
     }
     .member {
-      box-sizing: border-box;
       height: 100rpx;
       border-top-left-radius: 30rpx;
       border-top-right-radius: 30rpx;
       background-color: #f6d5aa;
-      .btn-box {
-        width: 80px;
-      }
       .menber-text-box {
         font-size: 0.875rem;
         height: 100%;
@@ -107,7 +139,6 @@
       height: 120rpx;
       .digital {
         font-size: 0.625rem;
-        box-sizing: border-box;
         height: 100%;
         width: calc(50% - 2rpx);
         .title {
@@ -115,13 +146,11 @@
         }
       }
       .border {
-        box-sizing: border-box;
         width: 2rpx;
         background-color: rgb(223, 223, 223);
       }
       .card-holder {
         font-size: 0.625rem;
-        box-sizing: border-box;
         height: 100%;
         width: 50%;
         .title {
@@ -130,8 +159,21 @@
       }
     }
     .common-box {
-      box-sizing: border-box;
-      height: 160rpx;
+      font-size: 28rpx;
+      background-color: #fff;
+      .common-btn-list {
+        height: 100rpx;
+        width: 100%;
+      }
+      .common-item {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+    .system-box {
       background-color: #fff;
     }
   }

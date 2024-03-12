@@ -17,6 +17,42 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "components/loginAndRegister/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/components/digitalAssets",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/components/order",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/components/audioList",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/components/consumeRecord",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/components/recharge",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {

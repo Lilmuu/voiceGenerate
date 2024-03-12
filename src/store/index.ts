@@ -1,1 +1,1 @@
-export { default as useCountStore } from './modules/countStore'
+export { userStore } from './modules/userStore'
