@@ -3,6 +3,13 @@ import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 
 onLaunch(() => {
   console.log('App Launch')
+  // 没有token跳转登录页
+  const token = uni.getStorageSync('token')
+  if (!token) {
+    uni.reLaunch({
+      url: 'components/loginAndRegister/index'
+    })
+  }
 })
 onShow(() => {
   console.log('App Show')
