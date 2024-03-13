@@ -11,7 +11,7 @@ const instance = axios.create({
   // #endif
   // #ifndef H5
   // @ts-ignore
-  baseURL: 'https://service-rbji0bev-1256505457.cd.apigw.tencentcs.com/release',
+  baseURL: '',
   // #endif
   adapter(config) {
     console.log('request adapter ↓↓')
@@ -46,7 +46,7 @@ instance.interceptors.request.use((config) => {
   const { method, params } = config
   // 附带鉴权的token
   const headers: any = {
-    token: uni.getStorageSync('token')
+    Authorization: 'fQs3krQkYuT3p0WdvQGxbA'
   }
   // 不缓存get请求
   if (method === 'get') {
