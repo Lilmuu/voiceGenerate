@@ -11,7 +11,14 @@ import { ref } from 'vue';
 
 const emit = defineEmits(['handleActiveCate'])
 
-const activeItem = ref(0)
+const props = defineProps({
+  activeCateIndex: {
+    type: Number,
+    default: 0
+  }
+})
+
+const activeItem = ref(props.activeCateIndex)
 const voiceType = ref([
   {
     label: '方言',

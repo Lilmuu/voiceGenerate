@@ -1,9 +1,9 @@
 <template>
   <view>
-    <u-tabs :list="tabsList" @change="handleTabsChange"></u-tabs>
+    <u-tabs :current="activeTabs" v-if="!searchStatus" :list="tabsList" @change="handleTabsChange"></u-tabs>
     <view class="flex">
-      <Category v-if="activeTabs == 0" @handleActiveCate="handleActiveCate"></Category>
-      <VoiceList :homePage="homePage" :voiceData="voiceData" @handleAudioList="handleAudioList">
+      <Category :activeCateIndex="activeCateIndex" v-if="activeTabs == 0 && !searchStatus" @handleActiveCate="handleActiveCate"></Category>
+      <VoiceList :homePage="homePage" :voiceData="searchStatus ? searchVoiceData : voiceData" @handleAudioList="handleAudioList">
         <template #btn="{ voiceItemData }">
           <u-button class="customBtn" @click="goGenerate(voiceItemData)">{{ homePage ? '去制作' : '使用'}}</u-button>
         </template>
@@ -31,6 +31,10 @@ const props = defineProps({
   homePage: {
     type: Boolean,
     default: true
+  },
+  searchStatus: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -50,6 +54,7 @@ const tabsList = ref([
 ])
 
 const voiceData = ref<VoiceData[]>([])
+const searchVoiceData = ref<VoiceData[]>([])
 const activeCateIndex = ref(0)
 const activeTabs = ref(0)
 
@@ -77,16 +82,22 @@ const handleActiveCate = (index:number) => {
   getVoiceList()
 }
 
-const getVoiceList = async () => {
+const getVoiceList = async (val?: string) => {
   const param:QueryVoiceParam = {}
-  activeTabs.value == 0 ? (param.tone_type = activeCateIndex.value) : (param.user_tone = activeTabs.value)
+  val && (param.tone_name = val)
+  !val && activeTabs.value == 0 ? (param.tone_type = activeCateIndex.value) : (param.user_tone = activeTabs.value)
   const res = await queryTone(param) as any
-  voiceData.value = res.message ? res.message.map((el:any) => {
+  const arr = res.message ? res.message.map((el:any) => {
     return {
       ...el,
       audioStatus: 'play'
     }
   }) : []
+  val ? searchVoiceData.value = arr : voiceData.value = arr
+}
+
+const clearSearchData = () => {
+  searchVoiceData.value = []
 }
 
 const handleTabsChange = (val:any) => {
@@ -97,6 +108,8 @@ const handleTabsChange = (val:any) => {
 onMounted(() => {
   getVoiceList()
 })
+
+defineExpose({getVoiceList,clearSearchData})
 </script>
 
 <style lang="scss" scoped>
