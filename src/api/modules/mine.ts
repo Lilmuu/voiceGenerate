@@ -5,7 +5,7 @@ interface reqPage {
   page_size: number
 }
 // 查询音频列表
-const queryAudioList = (data: { user_id: number }) => {
+const queryAudioList = (data: reqPage) => {
   return http.post('/query_audio_list', data)
 }
 // 登录
@@ -16,8 +16,14 @@ const login = (data: { phone: string; password: string }) => {
 const consumptionList = (data: reqPage) => {
   return http.post('/expense', data)
 }
+
+// 重置记录
+const rechargeList = (data: reqPage) => {
+  return http.post('/recharge', data)
+}
 export default {
   queryAudioList,
   login,
-  consumptionList
+  consumptionList,
+  rechargeList
 }

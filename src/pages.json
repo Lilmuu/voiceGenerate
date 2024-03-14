@@ -25,12 +25,6 @@
       }
     },
     {
-      "path": "pages/mine/components/digitalAssets",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/mine/components/order",
       "style": {
         "navigationStyle": "custom"
@@ -50,6 +44,12 @@
     },
     {
       "path": "pages/mine/components/recharge",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/mine/components/system",
       "style": {
         "navigationStyle": "custom"
       }

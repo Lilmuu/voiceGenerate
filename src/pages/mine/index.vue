@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { userStore } from '@/store/index'
+const user = userStore()
 const jumpTo = (url: string) => {
   uni.navigateTo({ url: url })
 }
@@ -11,13 +13,18 @@ const jumpTo = (url: string) => {
       <view class="pl5 mb4 flex justify-between grid-items-center">
         <view class="flex grid-items-center">
           <u-avatar
-            src="http://pic2.sc.chinaz.com/Files/pic/pic9/202002/hpic2119_s.jpg"
+            :src="
+              user.userInfo.avatar ||
+              'http://pic2.sc.chinaz.com/Files/pic/pic9/202002/hpic2119_s.jpg'
+            "
             icon="red-packet-fill"
             fontSize="22"
             size="50"
           ></u-avatar>
           <view class="flex flex-col ml4">
-            <text class="color-white font-700">未登录</text>
+            <text class="color-white font-700">{{
+              user.userInfo.nickname || '未登录'
+            }}</text>
             <text class="color-white mt1">普通用户</text>
           </view>
         </view>
@@ -46,28 +53,13 @@ const jumpTo = (url: string) => {
       </view>
     </view>
     <view class="content-box pl4 pr4">
-      <!-- 数字资产 -->
-      <view class="property flex mt2 border-rd">
-        <view
-          @click="jumpTo('components/digitalAssets')"
-          class="digital flex-col flex justify-between p-3"
-        >
-          <view class="fw700 title">数字资产</view>
-          <view>去查看</view>
-        </view>
-        <view class="border mt2 mb2"></view>
-        <view
-          @click="jumpTo('components/order')"
-          class="card-holder flex-col flex justify-between p-3"
-        >
-          <view class="fw700 title">我的订单</view>
-          <view>去查看</view>
-        </view>
-      </view>
       <!-- 常用功能 -->
       <view class="common-box mt4 border-rd p-3">
         <view class="fw700 mb2">常用功能</view>
         <view class="flex common-btn-list">
+          <view @click="jumpTo('components/order')" class="common-item">
+            充值记录
+          </view>
           <view class="common-item" @click="jumpTo('components/audioList')"
             >合成列表</view
           >
@@ -86,6 +78,7 @@ const jumpTo = (url: string) => {
             isLink
           ></u-cell>
           <u-cell
+            @click="jumpTo('components/system')"
             :border="false"
             icon="integral-fill"
             title="系统设置"
@@ -166,7 +159,7 @@ const jumpTo = (url: string) => {
         width: 100%;
       }
       .common-item {
-        width: 50%;
+        width: 33%;
         height: 100%;
         display: flex;
         justify-content: center;
