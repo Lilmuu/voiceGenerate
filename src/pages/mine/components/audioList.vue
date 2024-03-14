@@ -9,8 +9,13 @@ const audioList: Ref<Array<audioList>> = ref([])
 
 const total = ref(0)
 
+const pageData = ref({
+  page: 1,
+  page_size: 10
+})
+
 const queryAudioListAPI: () => Promise<void> = async () => {
-  const res = await mineApi.queryAudioList({ user_id: 1 })
+  const res = await mineApi.queryAudioList(pageData.value)
   audioList.value = res.data
 }
 

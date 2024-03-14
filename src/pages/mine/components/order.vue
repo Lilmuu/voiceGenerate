@@ -1,36 +1,67 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted, Ref } from 'vue'
+import { mineApi } from '@/api/index'
+import { rechargeItem } from '../type/index'
+import dayjs from 'dayjs'
 const params = ref({
-  pageSize: 10,
-  pageNum: 1
+  page_size: 10,
+  page: 1
 })
 
-const orderList = ref([])
+const rechargeList: Ref<Array<rechargeItem>> = ref([])
+
+// 获取充值记录
+const getRechargeList = async () => {
+  const res = (await mineApi.rechargeList(params.value)) as any
+  rechargeList.value = res.data
+  total.value = res.total
+  console.log(res)
+}
+
+const loadMore = () => {
+  if (rechargeList.value.length >= total.value) {
+    params.value.page++
+    getRechargeList()
+  }
+}
 
 const total = ref(0)
+
+onMounted(() => {
+  getRechargeList()
+})
 </script>
 
 <template>
-  <view class="order-box">
+  <view class="recharge-box">
     <u-navbar
       :fixed="false"
       height="40"
       :autoBack="true"
       :is-back="false"
       :title-bold="true"
-      title="我的订单"
+      title="充值记录"
     >
     </u-navbar>
-    <view class="content-box pr pl">
-      <u-cell title="单元格" value="内容" label="描述信息"></u-cell>
-      <u-cell title="单元格" value="内容" label="描述信息"></u-cell>
-      <u-cell title="单元格" value="内容" label="描述信息"></u-cell>
-    </view>
+    <scroll-view
+      style="height: calc(100vh - 80rpx)"
+      scroll-y="true"
+      class="scroll-Y"
+      @scrolltolower="loadMore"
+    >
+      <u-cell
+        v-for="item in rechargeList"
+        :key="item.id"
+        :title="`充值积分:${item.number}`"
+        :value="`充值类型:${item.type}`"
+        :label="`充值时间:${dayjs(item.time).format('YYYY-MM-DD HH:mm')}`"
+      ></u-cell>
+    </scroll-view>
   </view>
 </template>
 
 <style lang="scss" scoped>
-.order-box {
+.recharge-box {
   height: calc(100vh);
   .content-box {
     height: calc(100vh - 40px);

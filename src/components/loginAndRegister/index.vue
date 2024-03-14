@@ -66,6 +66,7 @@ const login = async () => {
             <u-input
               border="none"
               color="#cccccc"
+              type="password"
               v-model="loginForm.password"
               placeholder="请输入您的密码"
             ></u-input>
