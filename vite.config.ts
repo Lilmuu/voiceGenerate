@@ -37,9 +37,6 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         additionalData: '@import "@/styles/vars/_base.scss";'
-      },
-      less: {
-        additionalData: '@import "@/styles/vars/_base.less";'
       }
     }
   }

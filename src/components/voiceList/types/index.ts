@@ -3,7 +3,15 @@ import { Ref } from "vue"
 export type AudioStauts = 'play' | 'pause'
 
 export type VoiceData = {
-  audioStatus:AudioStauts
+  audioStatus:AudioStauts,
+  auditionSound: string;
+  category: string;
+  gender: string;
+  soundCharacterImage: string;
+  soundColorId: number;
+  soundColorInfo: string;
+  soundColorName: string;
+  soundColorType: string;
 }
 
 export interface HandleAudioParam {

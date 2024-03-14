@@ -1,6 +1,16 @@
 $title-size: 40rpx;
 $title-color: #bd34fe;
 
+@mixin domSize($width,$height){
+  width: $width;
+  height: $height;
+}
+
+@mixin flexCenter(){
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 html,
 body {
   height: 100%;

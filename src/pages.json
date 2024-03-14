@@ -49,6 +49,18 @@
       }
     },
     {
+      "path": "pages/generate/text",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/timbreList/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/mine/components/system",
       "style": {
         "navigationStyle": "custom"

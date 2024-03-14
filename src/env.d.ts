@@ -7,6 +7,11 @@ declare module '*.vue' {
   export default component
 }
 
+declare module 'uview-plus' {
+  const vis: any;
+  export default vis;
+}
+
 interface ImportMetaEnv {
   VITE_APP_TITLE: string
   VITE_APP_AXIOS_BASE_URL: string
