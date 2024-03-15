@@ -1,9 +1,12 @@
 <script lang="ts" setup>
 import { userStore } from '@/store/index'
+import { ref } from 'vue'
 const user = userStore()
 const jumpTo = (url: string) => {
   uni.navigateTo({ url: url })
 }
+
+const showQR = ref(false)
 </script>
 
 <template>
@@ -76,6 +79,7 @@ const jumpTo = (url: string) => {
             icon="integral-fill"
             title="联系客服"
             isLink
+            @click="showQR = true"
           ></u-cell>
           <u-cell
             @click="jumpTo('components/system')"
@@ -88,6 +92,15 @@ const jumpTo = (url: string) => {
       </view>
     </view>
   </view>
+  <u-modal :show="showQR" title="联系客服" @confirm="showQR = false">
+    <view>
+      <image
+        class="w-400rpx h-400rpx"
+        src="https://img0.baidu.com/it/u=2021266978,582980172&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500"
+        mode="scaleToFill"
+      />
+    </view>
+  </u-modal>
 </template>
 
 <style lang="scss" scoped>

@@ -2,11 +2,7 @@
   <view class="index-page">
     <Swiper></Swiper>
     <view class="p-5">
-      <view class="widget flex">
-        <u-button class="custom-style" type="primary" text="制作"></u-button>
-        <u-button class="custom-style" type="primary" text="克隆"></u-button>
-      </view>
-      <view class="mt-5">声音市场</view>
+      <view class="mt-2">声音市场</view>
       <Market :homePage="true"></Market>
     </view>
   </view>
