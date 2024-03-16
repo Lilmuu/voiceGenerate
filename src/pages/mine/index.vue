@@ -1,19 +1,33 @@
 <script lang="ts" setup>
 import { userStore } from '@/store/index'
 import { ref } from 'vue'
+import { mineApi } from '@/api/index'
+import { onShow } from '@dcloudio/uni-app'
 const user = userStore()
 const jumpTo = (url: string) => {
   uni.navigateTo({ url: url })
 }
 
+// 剩余积分
+const residue = async () => {
+  const res = (await mineApi.queryIntegral()) as any
+  user.userInfo.integral = res.integral
+  let userInfo = uni.getStorageSync('userInfo')
+  userInfo.integral = res.integral
+  uni.setStorageSync('userInfo', userInfo)
+}
+
 const showQR = ref(false)
+
+onShow(() => {
+  residue()
+})
 </script>
 
 <template>
   <view class="mine-box">
     <view class="header-box p-t">
-      <view class="flex flex-justify-end px color-white mb2">消息</view>
-      <view class="pl5 mb4 flex justify-between grid-items-center">
+      <view class="pl5 mb4 flex justify-between grid-items-center mt6">
         <view class="flex grid-items-center">
           <u-avatar
             :src="
@@ -38,15 +52,14 @@ const showQR = ref(false)
         </view>
       </view>
       <view
-        class="flex ml5 mr5 color-white member pl3 pr3 justify-between pt2 pb2"
+        class="flex ml5 mr5 color-white member pl3 pr3 justify-between pt2 pb2 grid-items-center"
       >
-        <view class="flex flex-col menber-text-box justify-between">
-          <view class="font-700 menber-text">硅音会员</view>
-          <view class="sm-text menber-text">拥有会员专属权益</view>
-        </view>
+        <view class="font-700 menber-text"
+          >剩余积分：{{ user.userInfo.integral }}</view
+        >
         <view class="btn-box">
           <u-button
-            @click="jumpTo('components/recharge')"
+            @click="showQR = true"
             shape="circle"
             size="small"
             color="linear-gradient(to right,  rgb(167, 95, 55),rgb(137, 76, 38))"
@@ -127,11 +140,8 @@ const showQR = ref(false)
       border-top-left-radius: 30rpx;
       border-top-right-radius: 30rpx;
       background-color: #f6d5aa;
-      .menber-text-box {
-        font-size: 0.875rem;
-        height: 100%;
-      }
       .menber-text {
+        font-size: 0.875rem;
         color: #8c5832;
       }
       .sm-text {
