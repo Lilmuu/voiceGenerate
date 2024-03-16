@@ -21,9 +21,14 @@ const consumptionList = (data: reqPage) => {
 const rechargeList = (data: reqPage) => {
   return http.post('/recharge', data)
 }
+// 查询剩余积分
+const queryIntegral = () => {
+  return http.post('/integral_query')
+}
 export default {
   queryAudioList,
   login,
   consumptionList,
-  rechargeList
+  rechargeList,
+  queryIntegral
 }
