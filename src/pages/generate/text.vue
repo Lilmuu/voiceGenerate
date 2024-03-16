@@ -38,6 +38,7 @@
                     v-for="(val,key) in submitLiveParam.products"
                     :key="key"
                     :index="key"
+                    ref="swipeActionItems"
                     @click="(val:any) => handleSwipeAction(val,key)"
                   >
                   <view class="productItems">
@@ -118,6 +119,7 @@ const swipeActionIndex = ref(0)
 const editModelInfo = ref<Recordable>([])
 const videoScript = ref<VideoScript[]>([])
 const activeVideoItem = ref(-1)
+const swipeActionItems = ref<any>(null)
 
 const getFormItems = (el:any) => {
   if(el) {
@@ -192,11 +194,9 @@ const handleSubmit = () => {
       generateStore.setTextStatus(true)
       generateStore.setTextContent(videoScript.value[activeVideoItem.value].script_content)
       generateStore.setTextKey(textInfo.value?.key!)
-      generateStore.clearRolesList()
-      generateStore.pushRolesList({
-        label: '当前',
-        id: 14,
-        name: '康辉'
+      generateStore.setRolesList({
+        index: 0,
+        label: '当前'
       })
       uni.navigateBack()
       return
@@ -239,28 +239,31 @@ const getChatText = () => {
       })
       stepIndex.value = 0
       formData.value = []
+      submitLiveParam.value.products = []
+      submitLiveParam.value.roles = []
+      submitLiveParam.value.enterprise = []
       return
     }
     generateStore.setTextStatus(true)
     generateStore.setTextContent(res.data.data)
     generateStore.setTextContinueId(res.data.id)
     generateStore.setTextKey(textInfo.value?.key!)
-    generateStore.clearRolesList()
     if(textInfo.value?.key == 'live') {
-      submitLiveParam.value.roles.map((el:any) => {
+      console.log(submitLiveParam.value,'aaaasd');
+      
+      submitLiveParam.value.roles.map((el:any,key:number) => {
         if(el[0]) {
-          generateStore.pushRolesList({
+          generateStore.setRolesList({
+            index: key,
             label: el[0],
-            id: 14,
-            name: '康辉'
+            prop: submitLiveParam.value.roles.length
           })
         }
       })
     }else {
-      generateStore.pushRolesList({
-        label: '当前',
-        id: 14,
-        name: '康辉'
+      generateStore.setRolesList({
+        index: 0,
+        label: '当前'
       })
     }
     uni.navigateBack()
@@ -330,6 +333,9 @@ const handleModalEdit = (status:string) => {
   if(status == 'confirm') {
     validAllForms(() => {
       editProductStatus.value = false
+      if(swipeActionItems.value && modalStatus.value == 0) {
+        swipeActionItems.value[swipeActionIndex.value]?.closeHandler()
+      }
       console.log(submitLiveParam.value,'finally');
     })
   }else {
