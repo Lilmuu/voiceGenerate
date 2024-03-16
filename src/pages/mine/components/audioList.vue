@@ -90,7 +90,7 @@ const downLoadFileAPI = (url: string) => {
 
 const handleAudioList = ({ activeIndex, audioStatus }: HandleAudioParam) => {
   const index = unref(activeIndex)
-  audioList.value[openCollapse.value].data[activeIndex.value].audioStatus =
+  audioList.value[openCollapse.value].data[index].audioStatus =
     audioStatus
 }
 

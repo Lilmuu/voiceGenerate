@@ -1,4 +1,4 @@
-import { ref } from "vue"
+import { onUnmounted, ref } from "vue"
 import { AudioStauts,HandleAudioList } from "@/components/voiceList/types"
 
 type InnerAudioContext = Recordable | null
@@ -18,6 +18,7 @@ export const useAudio = (emit?:HandleAudioList) => {
 
   const resetActiveIndex = () => {
     activeIndex.value = -1
+    resetAudio()
   }
 
   const handleAudio = (index:number,status:AudioStauts,url:string) => {
@@ -54,7 +55,9 @@ export const useAudio = (emit?:HandleAudioList) => {
     }
   }
 
-
+  onUnmounted(() => {
+    resetAudio()
+  })
 
   return {
     handleAudio,
