@@ -3,16 +3,7 @@ import axios from 'axios'
 import { getFullURL } from '@/utils/http'
 
 const instance = axios.create({
-  // Web 侧可以通过 vite.config.js 中的 proxy 配置，指定代理
-  // 小程序APP里需写完整路径，如 https://service-rbji0bev-1256505457.cd.apigw.tencentcs.com/release
-  // 可使用条件编译,详见 https://uniapp.dcloud.io/tutorial/platform.html#preprocessor
-  // #ifdef H5
   baseURL: import.meta.env.VITE_APP_AXIOS_BASE_URL,
-  // #endif
-  // #ifndef H5
-  // @ts-ignore
-  baseURL: '',
-  // #endif
   adapter(config) {
     console.log('request adapter ↓↓')
     console.log(config)

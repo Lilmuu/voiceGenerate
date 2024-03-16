@@ -41,13 +41,49 @@ const queryAudioListAPI: () => Promise<void> = async () => {
 }
 
 // 下载音频
-const downLoadFile = (url: string) => {
+const downLoadFileAPI = (url: string) => {
   uni.downloadFile({
     url,
     success: (res) => {
+      const tempFilePaths = res.tempFilePath
       if (res.statusCode === 200) {
-        console.log('下载成功')
+        let file = res.tempFilePath.split('/')
+        let fileName = file[file.length - 1]
+        let dtask = plus.downloader.createDownload(
+          url,
+          {
+            filename: 'file://storage/emulated/0/硅音造物/' + fileName
+          },
+          (d, status) => {
+            if (status === 200) {
+              uni.showToast({
+                title: `音频下载本地成功`,
+                icon: 'none',
+                position: 'bottom'
+              })
+              let fileSaveUrl = plus.io.convertLocalFileSystemURL(
+                d.filename as string
+              )
+              console.log(fileSaveUrl)
+            } else {
+              uni.showToast({
+                icon: 'none',
+                mask: true,
+                title: '失败请重新下载'
+              })
+            }
+          }
+        )
+        dtask.start()
       }
+    },
+    fail: (err) => {
+      console.log(err)
+      return uni.showToast({
+        icon: 'none',
+        mask: true,
+        title: '失败请重新下载'
+      })
     }
   })
 }
@@ -89,7 +125,7 @@ onMounted(() => {
                 shape="circle"
                 type="primary"
                 text="下载"
-                @click="downLoadFile(voiceItemData.auditionSound)"
+                @click="downLoadFileAPI(voiceItemData.auditionSound)"
               ></up-button>
             </template>
           </VoiceList>
