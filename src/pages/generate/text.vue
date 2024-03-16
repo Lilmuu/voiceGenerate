@@ -194,6 +194,7 @@ const handleSubmit = () => {
       generateStore.setTextStatus(true)
       generateStore.setTextContent(videoScript.value[activeVideoItem.value].script_content)
       generateStore.setTextKey(textInfo.value?.key!)
+      generateStore.setTextContinueId(-1)
       generateStore.setRolesList({
         index: 0,
         label: '当前'
@@ -249,8 +250,6 @@ const getChatText = () => {
     generateStore.setTextContinueId(res.data.id)
     generateStore.setTextKey(textInfo.value?.key!)
     if(textInfo.value?.key == 'live') {
-      console.log(submitLiveParam.value,'aaaasd');
-      
       submitLiveParam.value.roles.map((el:any,key:number) => {
         if(el[0]) {
           generateStore.setRolesList({

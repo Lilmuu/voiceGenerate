@@ -20,19 +20,23 @@ export const useGenerate = () => {
   const textContentArr = ref<Recordable[]>([])
 
   onShow(() => {
-    if(generateTextStatus.value) {
-      handleSliceText()
-      generateStore.setTextStatus(false)
-    }
+    setTimeout(() => {
+      if(generateTextStatus.value) {
+        textContentArr.value = []
+        handleSliceText()
+        generateStore.setTextStatus(false)
+      }
+    }, 10);
   })
   
   const handleSliceText = () => {
     if(textKey.value == 'reply') {
       if(typeof textContent.value !== 'string') return
-      textContent.value.split('。').map(el => {
+      textContent.value.split('\n\n').map(el => {
         if(el) {
           textContentArr.value.push({
-            text: el.replace(/\n\n|回复\d+:\s*/g,'')
+            // text: el.replace(/\n\n|回复\d+:\s*/g,'')
+            text: el
           })
         }
       })

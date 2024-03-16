@@ -72,8 +72,6 @@ const useGenerateStore = defineStore('generate', {
       this.textContinueId = id
     },
     setRolesList({index,prop,label,name,id}:RolesListParam) {
-      console.log(this.rolesList,'zzzzzzzzz');
-      
       label && (this.rolesList[index].label = label)
       name && (this.rolesList[index].name = name)
       id && (this.rolesList[index].id = id)

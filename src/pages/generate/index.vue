@@ -28,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useActionSheet } from "./hooks/useActionSheet"
 import { useGenerate } from "./hooks/useGnerate"
 import Navbar from "@/components/navbar/index.vue"
