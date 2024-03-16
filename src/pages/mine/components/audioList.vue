@@ -3,7 +3,6 @@ import { ref, Ref, unref } from 'vue'
 import { onMounted } from 'vue'
 import { mineApi } from '@/api/'
 import { audioList, audioItem } from '../type/index'
-import { AudioControl } from '@/utils/audio'
 import VoiceList from '@/components/voiceList/index.vue'
 import { HandleAudioParam } from '@/components/voiceList/types/index'
 
