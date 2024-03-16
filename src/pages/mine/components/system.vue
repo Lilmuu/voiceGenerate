@@ -12,6 +12,10 @@ const loginOut = () => {
   show.value = false
   uni.navigateTo({ url: '/components/loginAndRegister/index' })
 }
+
+const routerToPremission = () => {
+  uni.navigateTo({ url: 'premission' })
+}
 </script>
 
 <template>
@@ -22,12 +26,17 @@ const loginOut = () => {
       :autoBack="true"
       :is-back="false"
       :title-bold="true"
-      title="系统设置"
+      title="权限设置"
     >
     </u-navbar>
     <view class="content-box">
-      <u-cell title="权限设置" :isLink="true" arrow-direction="right"> </u-cell>
-      <u-cell title="关于我们" :isLink="true" arrow-direction="right"> </u-cell>
+      <u-cell
+        title="权限设置"
+        @click="routerToPremission"
+        :isLink="true"
+        arrow-direction="right"
+      >
+      </u-cell>
       <u-cell
         @click="show = true"
         title="退出登录"

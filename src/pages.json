@@ -65,6 +65,12 @@
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/mine/components/premission",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
   ],
   "tabBar": {
