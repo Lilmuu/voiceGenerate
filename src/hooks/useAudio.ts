@@ -1,4 +1,4 @@
-import { ref } from "vue"
+import { onUnmounted, ref } from "vue"
 import { AudioStauts,HandleAudioList } from "@/components/voiceList/types"
 
 type InnerAudioContext = Recordable | null
@@ -13,22 +13,29 @@ const resetAudio = () => {
 	}
 }
 
-export const useAudio = (emit:HandleAudioList) => {
+export const useAudio = (emit?:HandleAudioList) => {
   const activeIndex = ref(-1)
 
-  const handleAudio = (index:number,status:AudioStauts) => {
+  const resetActiveIndex = () => {
+    activeIndex.value = -1
+    resetAudio()
+  }
+
+  const handleAudio = (index:number,status:AudioStauts,url:string) => {
+    if(!emit) return
     if(activeIndex.value != index) {
       const activeLastIndex = JSON.parse(JSON.stringify(activeIndex.value))
       activeIndex.value != -1 && emit('handleAudioList',{activeIndex: activeLastIndex,audioStatus: 'play'})
       activeIndex.value = index
       resetAudio()
-      initAudio('http://47.115.205.23:8001/source/audio/zh_CN_XiaoxiaoNeural_Female.mp3')
+      initAudio(url)
     }
     if(!innerAudioContext) return
     status == 'play' ? innerAudioContext.play() : innerAudioContext.pause()
   }
 
   const initAudio = (audioPath:string) => {
+    if(!emit) return
     if (!innerAudioContext) {
       innerAudioContext = uni.createInnerAudioContext();
       innerAudioContext.src = audioPath;
@@ -48,9 +55,12 @@ export const useAudio = (emit:HandleAudioList) => {
     }
   }
 
-
+  onUnmounted(() => {
+    resetAudio()
+  })
 
   return {
-    handleAudio
+    handleAudio,
+    resetActiveIndex
   }
 }

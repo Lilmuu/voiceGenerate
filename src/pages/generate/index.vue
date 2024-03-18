@@ -28,12 +28,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import { useActionSheet } from "./hooks/useActionSheet"
 import { useGenerate } from "./hooks/useGnerate"
 import Navbar from "@/components/navbar/index.vue"
 
-const title = ref('')
+const {
+  textContentArr,
+  textContinueId,
+  textKey,
+  rolesList,
+  title,
+  handleContinue,
+  handleSaveAudio,
+  chooseTimbre
+} = useGenerate()
 
 const {
   showActionSheet,
@@ -41,16 +49,6 @@ const {
   handleSelect,
   handleSheet
 } = useActionSheet(title)
-
-const {
-  textContentArr,
-  textContinueId,
-  textKey,
-  rolesList,
-  handleContinue,
-  handleSaveAudio,
-  chooseTimbre
-} = useGenerate(title)
 </script>
 
 <style lang="scss" scoped>

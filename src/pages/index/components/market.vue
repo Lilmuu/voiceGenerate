@@ -3,7 +3,7 @@
     <u-tabs :current="activeTabs" v-if="!searchStatus" :list="tabsList" @change="handleTabsChange"></u-tabs>
     <view class="flex">
       <Category :activeCateIndex="activeCateIndex" v-if="activeTabs == 0 && !searchStatus" @handleActiveCate="handleActiveCate"></Category>
-      <VoiceList :homePage="homePage" :voiceData="searchStatus ? searchVoiceData : voiceData" @handleAudioList="handleAudioList">
+      <VoiceList ref="voiceList" :homePage="homePage" :voiceData="searchStatus ? searchVoiceData : voiceData" @handleAudioList="handleAudioList">
         <template #btn="{ voiceItemData }">
           <u-button class="customBtn" @click="goGenerate(voiceItemData)">{{ homePage ? '去制作' : '使用'}}</u-button>
         </template>
@@ -39,9 +39,8 @@ const props = defineProps({
 })
 
 const generateStore = useGenerateStore()
-const { 
-  rolesActIndex,
-  rolesList
+const {
+  rolesActIndex
 } = storeToRefs(generateStore)
 
 const tabsList = ref([
@@ -57,6 +56,7 @@ const voiceData = ref<VoiceData[]>([])
 const searchVoiceData = ref<VoiceData[]>([])
 const activeCateIndex = ref(0)
 const activeTabs = ref(0)
+const voiceList = ref<InstanceType<typeof VoiceList>>()
 
 const handleAudioList = ({ activeIndex, audioStatus }:HandleAudioParam) => {
   const index = unref(activeIndex)
@@ -64,20 +64,22 @@ const handleAudioList = ({ activeIndex, audioStatus }:HandleAudioParam) => {
 }
 
 const goGenerate = (data:VoiceData) => {
-  console.log(props.homePage,data);
-  if(!props.homePage) {
-    generateStore.setRolesList({
-      label: rolesList.value[rolesActIndex.value].label,
-      id: data.soundColorId,
-      name: data.soundColorName
-    })
-  }
+  console.log(data,'1');
+  
+  generateStore.setRolesList({
+    index: props.homePage ? 0 : rolesActIndex.value,
+    id: data.soundColorId,
+    name: data.soundColorName
+  })
   uni.switchTab({
     url: '/pages/generate/index'
   })
 }
 
 const handleActiveCate = (index:number) => {
+  if(activeCateIndex.value !== index && voiceList.value) {
+    voiceList.value.resetActiveIndex()
+  }
   activeCateIndex.value = index
   getVoiceList()
 }
@@ -96,17 +98,33 @@ const getVoiceList = async (val?: string) => {
   val ? searchVoiceData.value = arr : voiceData.value = arr
 }
 
+const getDefaultVoice = async () => {
+  const res = await queryTone({tone_type: 1}) as any
+  if(res.message?.length) {
+    generateStore.initRolesList({
+      label: '当前',
+      name: res.message[0].soundColorName,
+      id: res.message[0].soundColorId
+    })
+    generateStore.resetRolesList()
+  }
+}
+
 const clearSearchData = () => {
   searchVoiceData.value = []
 }
 
 const handleTabsChange = (val:any) => {
+  if(activeTabs.value !== val.index && voiceList.value) {
+    voiceList.value.resetActiveIndex()
+  }
   activeTabs.value = val.index
   getVoiceList()
 }
 
 onMounted(() => {
   getVoiceList()
+  getDefaultVoice()
 })
 
 defineExpose({getVoiceList,clearSearchData})

@@ -7,6 +7,11 @@ type RolesList = {
   name: string
 }
 
+type RolesListParam = {
+  index: number,
+  prop?: number
+} & Partial<RolesList>
+
 interface GenerateState {
   formData: Form[],
   textInfo: TextGenerateList | null,
@@ -17,6 +22,7 @@ interface GenerateState {
   audioTitle: string,
   textContinueId: number,
   rolesList: RolesList[],
+  defaultRolesList: RolesList[],
   rolesActIndex: number
 }
 
@@ -30,7 +36,8 @@ const useGenerateStore = defineStore('generate', {
     textKey: '',
     audioTitle: '',
     textContinueId: -1,
-    rolesList:[],
+    rolesList: [],
+    defaultRolesList: [],
     rolesActIndex: -1
   }),
   getters: {
@@ -64,14 +71,22 @@ const useGenerateStore = defineStore('generate', {
     setTextContinueId(id:number) {
       this.textContinueId = id
     },
-    pushRolesList(obj:RolesList) {
-      this.rolesList.push(obj)
+    setRolesList({index,prop,label,name,id}:RolesListParam) {
+      label && (this.rolesList[index].label = label)
+      name && (this.rolesList[index].name = name)
+      id && (this.rolesList[index].id = id)
+      if(prop && prop == 2 && index == 0) {
+        this.rolesList[1] = this.rolesList[0]
+      }
+      if(!prop) {
+        this.rolesList.splice(1,1)
+      }
     },
-    setRolesList(obj:RolesList) {
-      this.rolesList[this.rolesActIndex] = obj
+    resetRolesList() {
+      this.rolesList = this.defaultRolesList
     },
-    clearRolesList() {
-      this.rolesList = []
+    initRolesList(obj:RolesList) {
+      this.defaultRolesList = [obj]
     },
     setRolesActIndex(index:number) {
       this.rolesActIndex = index

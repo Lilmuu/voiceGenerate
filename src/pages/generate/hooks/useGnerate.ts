@@ -4,7 +4,9 @@ import { useGenerateStore } from '@/store/index'
 import { Ref, ref } from "vue"
 import { chatLivemsg,chatReplymsg,chatCopymsg,saveAudio } from "@/api/modules/generate"
 
-export const useGenerate = (title:Ref<string>) => {
+export const useGenerate = () => {
+  const title = ref('')
+
   const generateStore = useGenerateStore()
 
   const { 
@@ -18,19 +20,23 @@ export const useGenerate = (title:Ref<string>) => {
   const textContentArr = ref<Recordable[]>([])
 
   onShow(() => {
-    if(generateTextStatus.value) {
-      handleSliceText()
-      generateStore.setTextStatus(false)
-    }
+    setTimeout(() => {
+      if(generateTextStatus.value) {
+        textContentArr.value = []
+        handleSliceText()
+        generateStore.setTextStatus(false)
+      }
+    }, 10);
   })
   
   const handleSliceText = () => {
     if(textKey.value == 'reply') {
       if(typeof textContent.value !== 'string') return
-      textContent.value.split('。').map(el => {
+      textContent.value.split('\n\n').map(el => {
         if(el) {
           textContentArr.value.push({
-            text: el.replace(/\n\n|回复\d+:\s*/g,'')
+            // text: el.replace(/\n\n|回复\d+:\s*/g,'')
+            text: el
           })
         }
       })
@@ -107,8 +113,28 @@ export const useGenerate = (title:Ref<string>) => {
       }
       param.Text.push(obj)
     })
+    uni.showLoading({
+      title: '生成中',
+      mask: true
+    })
     saveAudio(param).then(res => {
       console.log(res,'1111111');
+      uni.showToast({
+        title: '生成成功',
+        icon: 'success',
+        mask: true
+      })
+      generateStore.resetRolesList()
+      title.value = ''
+      textContentArr.value = []
+    }).catch(() => {
+      uni.showToast({
+        title: '生成失败',
+        icon: 'error',
+        mask: true
+      })
+    }).finally(() => {
+      uni.hideLoading()
     })
   }
 
@@ -124,6 +150,7 @@ export const useGenerate = (title:Ref<string>) => {
     textContinueId,
     textKey,
     rolesList,
+    title,
     handleContinue,
     handleSaveAudio,
     chooseTimbre

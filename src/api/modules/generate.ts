@@ -26,7 +26,7 @@ export const chatCopymsg = (data:Recordable) => {
 
 export const saveAudio = (data:Recordable) => {
   return http({
-    url: 'http://192.168.0.131:5000/query',
+    url: 'query',
     method: 'post',
     data
   })

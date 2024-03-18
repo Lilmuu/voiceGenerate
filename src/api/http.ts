@@ -4,9 +4,8 @@ import { getFullURL } from '@/utils/http'
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_AXIOS_BASE_URL,
+  timeout: 600000,
   adapter(config) {
-    console.log('request adapter ↓↓')
-    console.log(config)
     const { url, method, data, params, headers, baseURL, paramsSerializer } =
       config
     return new Promise((resolve, reject) => {
@@ -18,8 +17,6 @@ const instance = axios.create({
         dataType: 'json',
         responseType: config.responseType,
         success: (res: any) => {
-          console.log('request success ↓↓')
-          console.log(res)
           resolve(res)
         },
         fail: (err: any) => {
