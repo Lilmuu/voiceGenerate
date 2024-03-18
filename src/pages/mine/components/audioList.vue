@@ -22,22 +22,23 @@ const pageData = ref({
 })
 
 const queryAudioListAPI: () => Promise<void> = async () => {
-  const res = await mineApi.queryAudioList(pageData.value)
-  audioList.value = res.data.length
-    ? res.data.map((list: any) => {
-        list.data = list.data.map((item: audioItem) => {
-          return {
-            auditionSound: item.audioUrl,
-            soundColorId: item.id,
-            soundColorInfo: item.text,
-            soundColorName: item.role,
-            audioStatus: 'play'
-          }
-        })
-        return list
-      })
-    : []
-  console.log(audioList.value)
+  const res = (await mineApi.queryAudioList(pageData.value)) as any
+  let data = res.data.map((list: any) => {
+    list.data = list.data.map((item: audioItem) => {
+      return {
+        auditionSound: item.audioUrl,
+        soundColorId: item.id,
+        soundColorInfo: item.text,
+        soundColorName: item.role,
+        audioStatus: 'play'
+      }
+    })
+    return list
+  })
+  audioList.value.push(...data)
+  console.log(data)
+  total.value = res.total
+  // console.log(audioList.value)
 }
 
 // 下载音频
@@ -94,6 +95,13 @@ const handleAudioList = ({ activeIndex, audioStatus }: HandleAudioParam) => {
     audioStatus
 }
 
+// 加载更多
+const loadMore = () => {
+  if (audioList.value.length >= total.value) return
+  pageData.value.page++
+  queryAudioListAPI()
+}
+
 onMounted(() => {
   queryAudioListAPI()
 })
@@ -110,7 +118,12 @@ onMounted(() => {
       title="合成列表"
     >
     </u-navbar>
-    <div class="content-box pl pr">
+    <scroll-view
+      style="height: calc(100vh - 80rpx)"
+      scroll-y="true"
+      class="scroll-Y"
+      @scrolltolower="loadMore"
+    >
       <u-collapse @open="changeCollapse" :value="openCollapse" accordion>
         <u-collapse-item
           v-for="(item, index) in audioList"
@@ -131,7 +144,7 @@ onMounted(() => {
           </VoiceList>
         </u-collapse-item>
       </u-collapse>
-    </div>
+    </scroll-view>
   </view>
 </template>
 
