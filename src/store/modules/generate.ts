@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { Form,TextGenerateList,TextKey,Scriptcontent } from "@/pages/generate/types"
+import { queryTone } from "@/api/modules/generate"
 
 type RolesList = {
   label: string,
@@ -83,13 +84,24 @@ const useGenerateStore = defineStore('generate', {
       }
     },
     resetRolesList() {
-      this.rolesList = this.defaultRolesList
+      this.rolesList = JSON.parse(JSON.stringify(this.defaultRolesList))
     },
     initRolesList(obj:RolesList) {
       this.defaultRolesList = [obj]
     },
     setRolesActIndex(index:number) {
       this.rolesActIndex = index
+    },
+    async getDefaultVoice() {
+      const res = await queryTone({tone_type: 1}) as any
+      if(res.message?.length) {
+        this.initRolesList({
+          label: '当前',
+          name: res.message[0].soundColorName,
+          id: res.message[0].soundColorId
+        })
+        this.resetRolesList()
+      }
     }
   }
 })

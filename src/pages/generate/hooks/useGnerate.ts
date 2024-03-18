@@ -86,7 +86,14 @@ export const useGenerate = () => {
         mask: true
       })
       const api = textKey.value == 'live' ? chatLivemsg : textKey.value == 'reply' ? chatReplymsg : chatCopymsg
-      api({q_id:textContinueId.value}).then(res => {
+      api({q_id:textContinueId.value}).then((res:any) => {
+        if(res?.message && res?.message == 'error') {
+          return uni.showToast({
+            title: '生成失败',
+            icon: 'error',
+            mask: true
+          })
+        }
         generateStore.setTextContent(res.data.data)
         handleSliceText()
       }).finally(() => {
@@ -117,8 +124,15 @@ export const useGenerate = () => {
       title: '生成中',
       mask: true
     })
-    saveAudio(param).then(res => {
+    saveAudio(param).then((res:any) => {
       console.log(res,'1111111');
+      if(res?.status_code == 304) {
+        return uni.showToast({
+          title: `${res.message}`,
+          icon: 'error',
+          mask: true
+        })
+      }
       uni.showToast({
         title: '生成成功',
         icon: 'success',
@@ -127,6 +141,8 @@ export const useGenerate = () => {
       generateStore.resetRolesList()
       title.value = ''
       textContentArr.value = []
+      generateStore.setTextContinueId(-1)
+      generateStore.setTextKey('')
     }).catch(() => {
       uni.showToast({
         title: '生成失败',

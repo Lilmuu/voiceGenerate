@@ -98,18 +98,6 @@ const getVoiceList = async (val?: string) => {
   val ? searchVoiceData.value = arr : voiceData.value = arr
 }
 
-const getDefaultVoice = async () => {
-  const res = await queryTone({tone_type: 1}) as any
-  if(res.message?.length) {
-    generateStore.initRolesList({
-      label: '当前',
-      name: res.message[0].soundColorName,
-      id: res.message[0].soundColorId
-    })
-    generateStore.resetRolesList()
-  }
-}
-
 const clearSearchData = () => {
   searchVoiceData.value = []
 }
@@ -124,7 +112,6 @@ const handleTabsChange = (val:any) => {
 
 onMounted(() => {
   getVoiceList()
-  getDefaultVoice()
 })
 
 defineExpose({getVoiceList,clearSearchData})

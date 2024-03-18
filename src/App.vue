@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
+import { useGenerateStore } from '@/store/index'
 
 onLaunch(() => {
   console.log('App Launch')
@@ -10,6 +11,8 @@ onLaunch(() => {
       url: 'components/loginAndRegister/index'
     })
   }
+  const generateStore = useGenerateStore()
+  generateStore.getDefaultVoice()
 })
 onShow(() => {
   console.log('App Show')

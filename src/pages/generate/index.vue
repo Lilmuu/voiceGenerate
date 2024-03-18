@@ -21,8 +21,8 @@
         <text>{{ item.name }}</text>
         <u-icon name="arrow-down" size="16"></u-icon>
       </view>
+      <u-button class="custom-style-submit" type="primary" text="保存" @click="handleSaveAudio"></u-button>
     </template>
-    <u-button class="custom-style-submit" type="primary" text="保存" @click="handleSaveAudio"></u-button>
   </view>
   <u-action-sheet :actions="sheetList" :closeOnClickOverlay="true" :closeOnClickAction="false" cancelText="取消" :show="showActionSheet" @select="handleSelect" @close="handleSheet(false)"></u-action-sheet>
 </template>

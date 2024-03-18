@@ -4,7 +4,6 @@ import { getFullURL } from '@/utils/http'
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_AXIOS_BASE_URL,
-  timeout: 600000,
   adapter(config) {
     const { url, method, data, params, headers, baseURL, paramsSerializer } =
       config
@@ -16,6 +15,7 @@ const instance = axios.create({
         data,
         dataType: 'json',
         responseType: config.responseType,
+        timeout: 600000,
         success: (res: any) => {
           resolve(res)
         },
