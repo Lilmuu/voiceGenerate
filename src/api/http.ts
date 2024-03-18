@@ -63,7 +63,13 @@ instance.interceptors.request.use((config) => {
  */
 instance.interceptors.response.use((v) => {
   if (v.data?.code === 401) {
-    uni.removeStorageSync('token')
+    uni.removeStorageSync('userInfo')
+    uni.showToast({
+      title: `登录已过期，请重新登录`,
+      icon: 'none',
+      position: 'bottom'
+    })
+    uni.navigateTo({ url: '/components/loginAndRegister/index' })
     // alert('即将跳转登录页。。。', '登录过期')
     // setTimeout(redirectHome, 1500)
     return v.data
