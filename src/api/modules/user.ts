@@ -1,24 +1,17 @@
 import http from '../http'
 
-function login(account: string, pwd: string) {
-  return http.post('user/login', {
-    account,
-    pwd
+export const getSmsCode = (data:Recordable) => {
+  return http({
+    url: 'login_sms_code',
+    method: 'post',
+    data
   })
 }
 
-/**
- * 获取验证码
- * @param phone 手机号
- */
-function getCode(phone: string): Promise<{ num: number }> {
-  return http.get('random/code', {
-    params: {
-      phone
-    }
+export const login = (data:Recordable) => {
+  return http({
+    url: 'login',
+    method: 'post',
+    data
   })
-}
-export default {
-  login,
-  getCode
 }

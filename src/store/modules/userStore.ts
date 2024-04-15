@@ -7,6 +7,7 @@ export const userStore = defineStore('userStore', () => {
   const removeLogin = () => {
     userInfo.value = ''
     uni.removeStorageSync('userInfo')
+    uni.removeStorageSync('token')
   }
   return {
     userInfo,

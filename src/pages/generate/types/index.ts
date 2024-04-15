@@ -76,7 +76,8 @@ export type Form = {
 export type SelectData = {
   label: string,
   form?: Form[],
-  rules?: FormRules
+  rules?: FormRules,
+  image?: string
 }
 
 export type FormParamObj = Omit<SelectData,'label'>
@@ -87,12 +88,14 @@ export type TextGenerateList = {
   selectData: SelectData[],
   multipleSlect?: Boolean,
   multipleInfo?: SelectData[],
+  multipleInfoEntity?: SelectData[],
+  scriptStyle?: SelectData[],
   steps?: {
     label:string
   }[]
 }
 
-export type TextKey = 'live' | 'reply' | 'text' | 'video' | ''
+export type TextKey = 'live' | 'reply' | 'text' | 'video' | 'customText' | ''
 
 export interface VideoScript {
   id: number;

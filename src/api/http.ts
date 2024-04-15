@@ -2,6 +2,17 @@ import axios from 'axios'
 
 import { getFullURL } from '@/utils/http'
 
+const clearUserStorages = () => {
+  uni.removeStorageSync('userInfo')
+  uni.removeStorageSync('token')
+  uni.showToast({
+    title: `登录已过期，请重新登录`,
+    icon: 'none',
+    position: 'bottom'
+  })
+  uni.reLaunch({ url: '/components/loginAndRegister/index' })
+}
+
 const instance = axios.create({
   baseURL: import.meta.env.VITE_APP_AXIOS_BASE_URL,
   adapter(config) {
@@ -58,15 +69,9 @@ instance.interceptors.request.use((config) => {
 /**
  * 响应拦截
  */
-instance.interceptors.response.use((v) => {
-  if (v.data?.code === 401) {
-    uni.removeStorageSync('userInfo')
-    uni.showToast({
-      title: `登录已过期，请重新登录`,
-      icon: 'none',
-      position: 'bottom'
-    })
-    uni.navigateTo({ url: '/components/loginAndRegister/index' })
+instance.interceptors.response.use((v:any) => {
+  if (v.data?.code === 401 || v.statusCode === 401) {
+    clearUserStorages()
     // alert('即将跳转登录页。。。', '登录过期')
     // setTimeout(redirectHome, 1500)
     return v.data

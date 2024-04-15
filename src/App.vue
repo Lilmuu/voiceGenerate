@@ -11,8 +11,10 @@ onLaunch(() => {
       url: 'components/loginAndRegister/index'
     })
   }
-  const generateStore = useGenerateStore()
-  generateStore.getDefaultVoice()
+  if(token) {
+    const generateStore = useGenerateStore()
+    generateStore.getDefaultVoice()
+  }
 })
 onShow(() => {
   console.log('App Show')

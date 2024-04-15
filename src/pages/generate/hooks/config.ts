@@ -141,6 +141,7 @@ export const textGenerateList: TextGenerateList[] = [
     selectData: [
       {
         label: '主播',
+        image: '/static/image/generate/zhubo.png',
         form: [
           {
             label: '姓名',
@@ -156,64 +157,30 @@ export const textGenerateList: TextGenerateList[] = [
             required: true
           },
           {
-            label: '爱好',
-            prop: 'hobby',
-            type: 'input'
-          },
-          {
-            label: '籍贯',
-            prop: 'nativePlace',
-            type: 'input'
-          },
-          {
-            label: '星座',
-            prop: 'constellation',
-            type: 'input'
-          },
-          {
-            label: '年龄',
-            prop: 'age',
-            type: 'input'
-          },
-          {
-            label: '从业经历',
-            prop: 'experience',
-            type: 'input'
-          },
-          {
-            label: '毕业大学',
-            prop: 'university',
-            type: 'input'
-          },
-          {
-            label: '主播风格',
-            prop: 'style',
+            label: '直播风格',
+            prop: 'role_type',
             type: 'picker',
             propData: [[
               {
-                label: '娱乐主播',
+                label: '本地生活',
                 id: 0
               },
               {
-                label: '知识主播',
+                label: '电商',
                 id: 1
               },
               {
-                label: '美妆主播',
+                label: '娱乐',
                 id: 2
               },
               {
-                label: '情感主播',
+                label: '知识',
                 id: 3
               },
               {
-                label: '常规主播',
+                label: '美妆',
                 id: 4
-              },
-              {
-                label: '说唱主播',
-                id: 5
-              },
+              }
             ]]
           }
         ],
@@ -234,6 +201,7 @@ export const textGenerateList: TextGenerateList[] = [
       },
       {
         label: '助播',
+        image: '/static/image/generate/zhubo1.png',
         form: [
           {
             label: '姓名',
@@ -249,38 +217,8 @@ export const textGenerateList: TextGenerateList[] = [
             required: true
           },
           {
-            label: '爱好',
-            prop: 'hobby',
-            type: 'input'
-          },
-          {
-            label: '籍贯',
-            prop: 'nativePlace',
-            type: 'input'
-          },
-          {
-            label: '星座',
-            prop: 'constellation',
-            type: 'input'
-          },
-          {
-            label: '年龄',
-            prop: 'age',
-            type: 'input'
-          },
-          {
-            label: '从业经历',
-            prop: 'experience',
-            type: 'input'
-          },
-          {
-            label: '毕业大学',
-            prop: 'university',
-            type: 'input'
-          },
-          {
             label: '助播风格',
-            prop: 'style',
+            prop: 'role_type',
             type: 'picker',
             propData: [[
               {
@@ -327,6 +265,7 @@ export const textGenerateList: TextGenerateList[] = [
       },
       {
         label: '店员',
+        image: '/static/image/generate/dianyuan.png',
         form: [
           {
             label: '姓名',
@@ -342,38 +281,8 @@ export const textGenerateList: TextGenerateList[] = [
             required: true
           },
           {
-            label: '爱好',
-            prop: 'hobby',
-            type: 'input'
-          },
-          {
-            label: '籍贯',
-            prop: 'nativePlace',
-            type: 'input'
-          },
-          {
-            label: '星座',
-            prop: 'constellation',
-            type: 'input'
-          },
-          {
-            label: '年龄',
-            prop: 'age',
-            type: 'input'
-          },
-          {
-            label: '从业经历',
-            prop: 'experience',
-            type: 'input'
-          },
-          {
-            label: '毕业大学',
-            prop: 'university',
-            type: 'input'
-          },
-          {
             label: '店员风格',
-            prop: 'style',
+            prop: 'role_type',
             type: 'picker',
             propData: [[
               {
@@ -420,6 +329,7 @@ export const textGenerateList: TextGenerateList[] = [
       },
       {
         label: '老板',
+        image: '/static/image/generate/laoban.png',
         form: [
           {
             label: '姓名',
@@ -435,38 +345,8 @@ export const textGenerateList: TextGenerateList[] = [
             required: true
           },
           {
-            label: '爱好',
-            prop: 'hobby',
-            type: 'input'
-          },
-          {
-            label: '籍贯',
-            prop: 'nativePlace',
-            type: 'input'
-          },
-          {
-            label: '星座',
-            prop: 'constellation',
-            type: 'input'
-          },
-          {
-            label: '年龄',
-            prop: 'age',
-            type: 'input'
-          },
-          {
-            label: '从业经历',
-            prop: 'experience',
-            type: 'input'
-          },
-          {
-            label: '毕业大学',
-            prop: 'university',
-            type: 'input'
-          },
-          {
             label: '老板风格',
-            prop: 'style',
+            prop: 'role_type',
             type: 'picker',
             propData: [[
               {
@@ -518,38 +398,23 @@ export const textGenerateList: TextGenerateList[] = [
         form: [
           {
             label: '企业名称',
-            prop: 'enterpriseName',
+            prop: 'name',
             required: true,
             type: 'input'
           },
           {
-            label: '企业主要服务内容',
-            prop: 'enterpriseContent',
+            label: '企业基础信息',
+            prop: 'basics_massage',
             type: 'input'
           },
           {
-            label: '企业历史',
-            prop: 'enterpriseHistory',
-            type: 'input'
-          },
-          {
-            label: '企业成就',
-            prop: 'enterpriseAchievement',
-            type: 'input'
-          },
-          {
-            label: '场地环境',
-            prop: 'enterpriseEnvironment',
-            type: 'input'
-          },
-          {
-            label: '特色内容',
-            prop: 'specialContent',
+            label: '企业服务特色',
+            prop: 'style',
             type: 'input'
           },
         ],
         rules: {
-          'enterpriseName': {
+          'name': {
             type: 'string',
             required: true,
             message: '请填写企业名称',
@@ -562,49 +427,143 @@ export const textGenerateList: TextGenerateList[] = [
         form: [
           {
             label: '产品名称',
-            prop: 'productName',
+            prop: 'name',
             required: true,
             type: 'input'
           },
           {
-            label: '产品功能',
-            prop: 'productFunction',
+            label: '产品描述',
+            prop: 'massage',
             type: 'input'
           },
           {
-            label: '产品特色',
-            prop: 'productSpecial',
+            label: '核心特色',
+            prop: 'style',
             type: 'input'
           },
           {
             label: '产品价格',
-            prop: 'productPrice',
-            type: 'input'
-          },
-          {
-            label: '产品外观',
-            prop: 'productAppearance',
-            type: 'input'
-          },
-          {
-            label: '产品品质',
-            prop: 'productQuality',
-            type: 'input'
-          },
-          {
-            label: '相关服务',
-            prop: 'relatedService',
+            prop: 'pirce',
             type: 'input'
           }
         ],
         rules: {
-          'productName': {
+          'name': {
             type: 'string',
             required: true,
             message: '请填写产品名称',
             trigger: ['blur']
           }
         }
+      }
+    ],
+    multipleInfoEntity: [
+      {
+        label: '店铺',
+        form: [
+          {
+            label: '店铺名称',
+            prop: 'shopName',
+            required: true,
+            type: 'input'
+          },
+          {
+            label: '所属行业',
+            prop: 'shopIndnstry',
+            type: 'input'
+          },
+          {
+            label: '商铺地址',
+            prop: 'shopAddress',
+            type: 'input'
+          },
+        ],
+        rules: {
+          'shopName': {
+            type: 'string',
+            required: true,
+            message: '请填写店铺名称',
+            trigger: ['blur']
+          }
+        }
+      },
+      {
+        label: '套餐',
+        form: [
+          {
+            label: '套餐名称',
+            prop: 'setMealName',
+            required: true,
+            type: 'input'
+          },
+          {
+            label: '套餐链接',
+            prop: 'setMealLink',
+            type: 'input'
+          },
+          {
+            label: '套餐描述',
+            prop: 'setMealDescribe',
+            type: 'input'
+          },
+          {
+            label: '套餐价格',
+            prop: 'setMealPrice',
+            type: 'input'
+          },
+          {
+            label: '优惠力度',
+            prop: 'setMealDiscount',
+            type: 'input'
+          }
+        ],
+        rules: {
+          'setMealName': {
+            type: 'string',
+            required: true,
+            message: '请填写店铺名称',
+            trigger: ['blur']
+          }
+        }
+      }
+    ],
+    scriptStyle: [
+      {
+        label: '脚本风格',
+        form: [
+          {
+            label: '脚本风格',
+            prop: 'script_style',
+            type: 'picker',
+            propData: [[
+              {
+                label: '武侠风',
+                id: 0
+              },
+              {
+                label: '文学风',
+                id: 1
+              },
+              {
+                label: '浪漫主义',
+                id: 2
+              },
+              {
+                label: '相声风',
+                id: 3
+              },
+              {
+                label: '美食介绍风',
+                id: 4
+              }
+            ]]
+          },
+          {
+            label: '自定义脚本风格',
+            prop: 'customScriptStyle',
+            type: 'input'
+          }
+        ],
       }
     ],
     steps: [
@@ -619,6 +578,9 @@ export const textGenerateList: TextGenerateList[] = [
       },
       {
         label: '填写产品信息'
+      },
+      {
+        label: '脚本风格'
       }
     ],
     multipleSlect: true

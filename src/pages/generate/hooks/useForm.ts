@@ -10,8 +10,8 @@ export const useForm = (formData:Form[],labelInfo?:string,editModelInfo?:Recorda
   const cusForm = ref<FormRef | null>(null)
   const modelForm = computed(() => {
     const obj:Recordable = {}
-    formData.map((val,key) => {
-      obj[val.prop] = editModelInfo ? editModelInfo[key] : ''
+    formData.map(val => {
+      obj[val.prop] = editModelInfo ? editModelInfo[val.prop] : ''
     })
     return obj
   })
@@ -32,14 +32,19 @@ export const useForm = (formData:Form[],labelInfo?:string,editModelInfo?:Recorda
 
   const validateForms = () => {
     if(cusForm.value) {
-      generateStore.pushValidResult(cusForm.value.validate().then(() => {
-        const obj = {
-          labelInfo,
-          ...modelForm.value
-        }
-        !labelInfo && delete obj.labelInfo
-        return obj
-      }))
+      if(formData.some(el => el.prop == 'script_style')) {
+        const result = Promise.resolve(JSON.parse(JSON.stringify(modelForm.value)))
+        generateStore.pushValidResult(result)
+      }else {
+        generateStore.pushValidResult(cusForm.value.validate().then(() => {
+          const obj = {
+            role:labelInfo,
+            ...modelForm.value
+          }
+          !labelInfo && delete obj.role
+          return obj
+        }))
+      }
     }
   }
 

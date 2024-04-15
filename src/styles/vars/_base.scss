@@ -1,5 +1,12 @@
+@font-face {
+  font-family: 'hanguangzhenbiao';
+  src: url('../../static/font/hanguangzhenbiao.woff2');
+}
+
 $title-size: 40rpx;
 $title-color: #bd34fe;
+
+$base-background:  linear-gradient(270deg, rgba(189, 254, 3, 1) 0%, rgba(112, 228, 120, 1) 100%);
 
 @mixin domSize($width,$height){
   width: $width;
@@ -26,4 +33,40 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+}
+
+.modalBtn {
+  height: 96rpx;
+  border-radius: 14rpx;
+  background: linear-gradient(270deg, rgba(189, 254, 3, 1) 0%, rgba(112, 228, 120, 1) 100%);
+  font-weight: bold;
+  border: unset;
+  &:nth-of-type(2) {
+    background: #fff;
+  }
+}
+
+.titlesName {
+  font-family: 'hanguangzhenbiao';
+  padding: 0 8rpx;
+  display: inline-block;
+  font-synthesis: weight style;
+  font-style: italic;
+  position: relative;
+  z-index: 9;
+  &::after {
+    content: "";
+    width: 100%;
+    height: 12rpx;
+    background: linear-gradient(270deg, rgba(189, 254, 3, 1) 0%, rgba(112, 228, 120, 1) 100%);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+  }
+}
+
+.noDatas {
+  @include flexCenter();
+  flex-flow: column;
 }

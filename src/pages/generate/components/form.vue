@@ -1,19 +1,19 @@
 <template>
   <view>
-    <u-form :model="modelForm" :rules="rules" labelPosition="left" labelWidth="auto" ref="cusForm">
+    <u-form :model="modelForm" :rules="rules" labelPosition="left" :labelWidth="enterpriseState ? '240rpx' : '160rpx'" ref="cusForm">
       <u-form-item v-for="(item, index) in formData" :key="index" :label="item.label" :prop="item.prop" :borderBottom="true" :required="item.required">
         <template v-if="item.type == 'input'">
-          <u-input v-model="modelForm[item.prop]" border="none"></u-input>
+          <u-input v-model="modelForm[item.prop]" border="none" :placeholder="`请输入${item.label}`"></u-input>
         </template>
         <template v-if="item.type == 'radio'">
-          <u-radio-group v-model="modelForm[item.prop]" placement="row">
+          <u-radio-group v-model="modelForm[item.prop]" placement="row" activeColor="rgba(189, 254, 3, 1)">
             <u-radio v-for="(val, key) in item.propData" :key="key" :label="val" :name="val">
             </u-radio>
           </u-radio-group>
         </template>
         <template v-if="item.type == 'picker'">
           <text class="mr-3">{{ modelForm[item.prop] }}</text>
-          <u-button type="primary" size="small" class="customBtn" @click="handlePicker(item.propData as PickerColumns[])">选择</u-button>
+          <u-button size="small" class="customBtn" @click="handlePicker(item.propData as PickerColumns[])">选择</u-button>
           <u-picker :show="showPicker" :columns="pickerColumns" keyName="label" @confirm="(e:any) => pickerConfirm(e,item.prop)" @cancel="pickerCancel"></u-picker>
         </template>
       </u-form-item>
@@ -29,7 +29,8 @@ const props = defineProps<{
   formData: Form[]
   rules: FormRules,
   labelInfo?: string,
-  editModelInfo?: Recordable
+  editModelInfo?: Recordable,
+  enterpriseState?: Boolean
 }>()
 
 const {
@@ -48,6 +49,24 @@ defineExpose({validateForms})
 
 <style lang="scss" scoped>
 .customBtn {
-  width: 100rpx;
+  width: 120rpx;
+  height: 62rpx;
+  border-radius: 442rpx;
+  background: $base-background;
+  border: 4rpx solid rgba(213, 255, 150, 1);
+  font-weight: bold;
 }
-</style>../hooks/useForm
+::v-deep .u-form-item__body__left__content__label {
+  font-size: 28rpx;
+}
+::v-deep .u-form {
+  .u-form-item:nth-last-of-type(1) {
+    .u-line {
+      border-bottom: unset!important;
+    }
+  }
+  .u-input__content__field-wrapper__field {
+    font-size: 28rpx!important;
+  }
+}
+</style>

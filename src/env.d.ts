@@ -12,6 +12,11 @@ declare module 'uview-plus' {
   export default vis;
 }
 
+declare module '@/js_sdk/wa-permission/permission.js' {
+  const vis: any;
+  export default vis;
+}
+
 interface ImportMetaEnv {
   VITE_APP_TITLE: string
   VITE_APP_AXIOS_BASE_URL: string

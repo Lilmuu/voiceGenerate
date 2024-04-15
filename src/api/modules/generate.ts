@@ -8,6 +8,14 @@ export const chatLivemsg = (data:Recordable) => {
   })
 }
 
+export const chat_live = (data:Recordable) => {
+  return http({
+    url: 'chat_live',
+    method: 'post',
+    data
+  })
+}
+
 export const chatReplymsg = (data:Recordable) => {
   return http({
     url: 'chat_replymeg',

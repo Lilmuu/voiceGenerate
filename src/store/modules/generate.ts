@@ -5,12 +5,12 @@ import { queryTone } from "@/api/modules/generate"
 type RolesList = {
   label: string,
   id: number,
-  name: string
+  name: string,
+  image: string
 }
 
 type RolesListParam = {
-  index: number,
-  prop?: number
+  index: number
 } & Partial<RolesList>
 
 interface GenerateState {
@@ -24,7 +24,8 @@ interface GenerateState {
   textContinueId: number,
   rolesList: RolesList[],
   defaultRolesList: RolesList[],
-  rolesActIndex: number
+  rolesActIndex: number,
+  rolesActId: number
 }
 
 const useGenerateStore = defineStore('generate', {
@@ -39,7 +40,8 @@ const useGenerateStore = defineStore('generate', {
     textContinueId: -1,
     rolesList: [],
     defaultRolesList: [],
-    rolesActIndex: -1
+    rolesActIndex: -1,
+    rolesActId: -1
   }),
   getters: {
     
@@ -72,16 +74,18 @@ const useGenerateStore = defineStore('generate', {
     setTextContinueId(id:number) {
       this.textContinueId = id
     },
-    setRolesList({index,prop,label,name,id}:RolesListParam) {
+    setRolesList({index,label,name,id,image}:RolesListParam) {
       label && (this.rolesList[index].label = label)
       name && (this.rolesList[index].name = name)
       id && (this.rolesList[index].id = id)
-      if(prop && prop == 2 && index == 0) {
-        this.rolesList[1] = this.rolesList[0]
-      }
-      if(!prop) {
-        this.rolesList.splice(1,1)
-      }
+      image && (this.rolesList[index].image = image)
+    },
+    clearRolesList() {
+      this.resetRolesList()
+      this.rolesList.push(JSON.parse(JSON.stringify(this.rolesList[0])))
+    },
+    pushRolesList(index:number,label:string) {
+      this.rolesList[index].label = label
     },
     resetRolesList() {
       this.rolesList = JSON.parse(JSON.stringify(this.defaultRolesList))
@@ -92,13 +96,17 @@ const useGenerateStore = defineStore('generate', {
     setRolesActIndex(index:number) {
       this.rolesActIndex = index
     },
+    setRolesActId(id:number) {
+      this.rolesActId = id
+    },
     async getDefaultVoice() {
       const res = await queryTone({tone_type: 1}) as any
       if(res.message?.length) {
         this.initRolesList({
           label: '当前',
           name: res.message[0].soundColorName,
-          id: res.message[0].soundColorId
+          id: res.message[0].soundColorId,
+          image: res.message[0].soundCharacterImage
         })
         this.resetRolesList()
       }

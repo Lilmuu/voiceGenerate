@@ -7,7 +7,19 @@
       }
     },
     {
+      "path": "pages/voice/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/generate/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/generate/customText",
       "style": {
         "navigationStyle": "custom"
       }
@@ -73,28 +85,39 @@
       }
     }
   ],
+  "globalStyle": {
+    "app-plus": {
+      "bounce": "none"
+    }
+  },
   "tabBar": {
-    "color": "#333333",
-    "selectedColor": "#4449a3",
-    "borderStyle": "black",
+    "color": "rgba(172, 175, 189, 1)",
+    "selectedColor": "rgba(0, 0, 0, 1)",
+    "borderStyle": "rgba(172, 175, 189, 1)",
     "backgroundColor": "#fff",
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "static/image/shouye.png",
-        "selectedIconPath": "static/image/shouye_select.png",
+        "iconPath": "static/image/home.png",
+        "selectedIconPath": "static/image/home_select.png",
         "text": "首页"
       },
       {
+        "pagePath": "pages/voice/index",
+        "iconPath": "static/image/voice.png",
+        "selectedIconPath": "static/image/voice_select.png",
+        "text": "声音市场"
+      },
+      {
         "pagePath": "pages/generate/index",
-        "iconPath": "static/image/chuangzuo.png",
-        "selectedIconPath": "static/image/chuangzuo_select.png",
+        "iconPath": "static/image/generate.png",
+        "selectedIconPath": "static/image/generate_select.png",
         "text": "制作"
       },
       {
         "pagePath": "pages/mine/index",
-        "iconPath": "static/image/wode.png",
-        "selectedIconPath": "static/image/wode_select.png",
+        "iconPath": "static/image/mine.png",
+        "selectedIconPath": "static/image/mine_select.png",
         "text": "我的"
       }
     ]

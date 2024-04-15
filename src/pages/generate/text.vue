@@ -1,72 +1,104 @@
 <template>
-  <view>
-    <u-navbar title="生成文本" :autoBack="true" :placeholder=true bgColor="#e5e5e5"></u-navbar>
-    <view class="p-30rpx">
+  <view class="textPage">
+    <u-navbar title="生成文本" :autoBack="true" :placeholder=true class="font-bold" :bgColor="'transparent'"></u-navbar>
+    <view class="p-32rpx">
       <template v-if="['live','reply','video'].includes(textInfo!.key)">
-        <u-steps v-if="textInfo?.steps" :current="stepIndex">
-          <u-steps-item v-for="(item,index) in textInfo.steps" :key="index" :title="item.label"></u-steps-item>
-        </u-steps>
+        <view class="progress">
+          <u-steps v-if="textInfo?.steps" :current="stepIndex" :dot="true" :inactiveColor="'rgba(194, 195, 201, 1)'">
+            <u-steps-item v-for="(item,index) in textInfo.steps" :key="index" :title="item.label" class="customStep" :class="{'activeStep': stepIndex >= index,'activeStepLine': stepIndex > index}"></u-steps-item>
+          </u-steps>
+        </view>
         <template v-if="stepIndex == 0">
-          <view v-if="textInfo?.multipleSlect" class="mt-3">身份可以多选，最多选择两项</view>
-          <view v-if="textInfo?.selectData" class="mt-5">
-            <view v-for="(item,index) in textInfo.selectData" :key="index" @click="handleActiveSelect(index)" class="h-60rpx bg-#f6f7fa border-rd-12rpx mb-5 selectItem" :class="{'activeItem': activeRole.includes(index)}">{{ item.label }}</view>
+          <view v-if="textInfo?.multipleSlect" class="text-center color-#282930 font-bold mb-60rpx">身份可以多选，最多选择两项</view>
+          <view v-if="textInfo?.selectData" class="mb-180rpx">
+            <view v-for="(item,index) in textInfo.selectData" :key="index" @click="handleActiveSelect(index)" class="h-136rpx bg-#f6f7fa border-rd-20rpx mb-48rpx selectItem relative" :class="{'activeItem': activeRole.includes(index)}">
+              {{ item.label }}
+              <image v-if="textInfo.key == 'live'" :src="item.image" class="users"/>
+            </view>
           </view>
         </template>
         <template v-if="stepIndex == 1">
           <template v-if="textInfo?.key !== 'video'">
-            <view class="mt-5 mb-5" v-for="(item,index) in formData" :key="index">
-              <view>{{ item.label }}信息：</view>
-              <FormList :ref="(el) => getFormItems(el)" :formData="item.form!" :rules="item.rules!" :labelInfo="item.label"></FormList>
+            <view class="contentArea">
+              <view class="mb-32rpx p-32rpx formArea" v-for="(item,index) in formData" :key="index">
+                <view class="flex flex-items-center">
+                  <view class="hexagon">
+                    <view class="text">{{ item.label.slice(0,1) }}</view>
+                  </view>
+                  <view class="font-bold color-#282930">{{ item.label }}信息：</view>
+                </view>
+                <FormList :ref="(el) => getFormItems(el)" :formData="item.form!" :rules="item.rules!" :labelInfo="item.label"></FormList>
+              </view>
             </view>
           </template>
           <template v-else>
             <view class="mt-5 mb-5">
-              <view class="h-60rpx bg-#f6f7fa border-rd-12rpx mb-20rpx selectItem" v-for="(item,index) in videoScript" :key="index" :class="{'activeItem': activeVideoItem == index}" @click="handleActiveVideo(index)">
+              <view class="h-136rpx bg-#f6f7fa border-rd-20rpx mb-48rpx selectItem" v-for="(item,index) in videoScript" :key="index" :class="{'activeItem': activeVideoItem == index}" @click="handleActiveVideo(index)">
                 <view class="videoTextItem">{{ item.script_name }}</view>
               </view>
             </view>
           </template>
         </template>
-        <template v-if="[2,3].includes(stepIndex)">
-          <template v-if="textInfo?.multipleInfo">
-            <view class="mt-5 mb-5">
-              <FormList v-if="stepIndex == 2" :ref="(el) => getFormItems(el)" :formData="textInfo?.multipleInfo[0].form!" :rules="textInfo?.multipleInfo[0].rules!"></FormList>
-              <view  v-else>
-                <u-swipe-action class="mr--30rpx">
-                  <u-swipe-action-item
-                    :options="productOption"
-                    v-for="(val,key) in submitLiveParam.products"
-                    :key="key"
-                    :index="key"
-                    ref="swipeActionItems"
-                    @click="(val:any) => handleSwipeAction(val,key)"
-                  >
-                  <view class="productItems">
-                    <view>产品{{ key + 1 }}</view>
-                    <view class="itemName">名称: {{ val[0] || '' }}</view>
+        <template v-if="[2,3,4].includes(stepIndex)">
+          <view class="contentArea">
+            <view :class="{'formArea': [2,4].includes(stepIndex),'p-32rpx': [2,4].includes(stepIndex)}">
+              <view v-if="stepIndex == 2" class="flex flex-items-center">
+                <view class="hexagon">
+                  <view class="text">{{ entityStatus ? '店' : '企' }}</view>
+                </view>
+                <view class="font-bold color-#282930">{{ entityStatus ? '店铺' : '企业' }}信息：</view>
+              </view>
+              <FormList v-if="stepIndex == 2 && (textInfo?.multipleInfo && textInfo?.multipleInfoEntity)" :ref="(el) => getFormItems(el)" :formData="entityStatus ? textInfo?.multipleInfoEntity[0].form! : textInfo?.multipleInfo[0].form!" :rules="entityStatus ? textInfo?.multipleInfoEntity[0].rules! : textInfo?.multipleInfo[0].rules!" :enterpriseState="true"></FormList>
+              <view  v-if="stepIndex == 3">
+                <view class="productItem flex mb-32rpx" v-for="(val,key) in submitLiveParam.products" :key="key">
+                  <view class="w-448rpx productBtns">
+                    <view class="flex flex-items-center mt-10rpx">
+                      <view class="hexagon">
+                        <view class="text">{{ key + 1 }}</view>
+                      </view>
+                      <view class="font-bold color-#282930">产品{{ key + 1 }}</view>
+                    </view>
+                    <view class="mb-8rpx names">名称：{{ (entityStatus ? val.setMealName : val.name) || '' }}</view>
                   </view>
-                  </u-swipe-action-item>
-                </u-swipe-action>
+                  <view class="productBtns">
+                    <u-button class="productBtn" @click="handleSwipeAction('edit',key)">编辑</u-button>
+                    <u-button class="productBtn" @click="handleSwipeAction('delete',key)">删除</u-button>
+                  </view>
+                </view>
                 <view class="addProduct" @click="handleAddProduct">
-                  <text>+ 添加一个产品</text>
+                  <text>+ 添加一个{{ entityStatus ? '套餐' : '产品' }}</text>
                 </view>
               </view>
+              <template v-if="stepIndex == 4 && textInfo?.scriptStyle">
+                <view>只需填写其中一项</view>
+                <FormList :ref="(el) => getFormItems(el)" :formData="textInfo?.scriptStyle[0].form!" :rules="textInfo?.scriptStyle[0].rules!" :enterpriseState="true"></FormList>
+              </template>
             </view>
-          </template>
+          </view>
         </template>
       </template>
       <template v-else-if="textInfo?.key == 'text'">
-        <view class="mt-5 mb-5">
-          <FormList :ref="(el) => getFormItems(el)" :formData="textInfo?.selectData[0].form!" :rules="textInfo?.selectData[0].rules!"></FormList>
+        <view class="contentArea">
+          <view class="formArea p-32rpx">
+            <FormList :ref="(el) => getFormItems(el)" :formData="textInfo?.selectData[0].form!" :rules="textInfo?.selectData[0].rules!"></FormList>
+          </view>
         </view>
       </template>
-      <u-button type="primary" @click="handleSubmit">确定</u-button>
+      <view class="fixedBtn">
+        <u-button class="customBtns" @click="handleSubmit">确定</u-button>
+      </view>
     </view>
   </view>
-  <u-modal :show="editProductStatus" :title="modalStatus == 0 ? '编辑' : '新增'" showCancelButton @cancel="handleModalEdit('cancel')" @confirm="handleModalEdit('confirm')">
-    <template v-if="textInfo?.multipleInfo">
-      <FormList :ref="(el) => getFormItems(el)" :formData="textInfo?.multipleInfo[1].form!" :rules="textInfo?.multipleInfo[1].rules!" :editModelInfo="editModelInfo"></FormList>
-    </template>
+  <u-modal :show="editProductStatus" :title="modalStatus == 0 ? '编辑' : '新增'" :showConfirmButton="false">
+    <view class="w-100%">
+      <template v-if="textInfo?.multipleInfo && textInfo.multipleInfoEntity">
+        <FormList :ref="(el) => getFormItems(el)" :formData="entityStatus ? textInfo?.multipleInfoEntity[1].form! : textInfo?.multipleInfo[1].form!" :rules="entityStatus ? textInfo?.multipleInfoEntity[1].rules! : textInfo?.multipleInfo[1].rules!" :editModelInfo="editModelInfo"></FormList>
+      </template>
+      <view class="mt-40rpx">
+        <u-button class="modalBtn" @click="handleModalEdit('confirm')">确定</u-button>
+        <u-button class="modalBtn" @click="handleModalEdit('cancel')">取消</u-button>
+      </view>
+    </view>
   </u-modal>
 </template>
 
@@ -76,7 +108,7 @@ import { useGenerateStore } from '@/store/index'
 import { ref } from 'vue'
 import { SelectData,VideoScript } from "./types"
 import FormList from "./components/form.vue"
-import { chatLivemsg,chatReplymsg,chatCopymsg,queryScript } from "@/api/modules/generate"
+import { chat_live,chatReplymsg,chatCopymsg,queryScript } from "@/api/modules/generate"
 import { testChatError } from "./hooks/config"
 
 const generateStore = useGenerateStore()
@@ -90,7 +122,8 @@ const submitLiveParam = ref<Recordable>({
   title: audioTitle.value,
   roles: [],
   enterprise: [],
-  products: []
+  products: [],
+  script_style: ''
 })
 const submitReplyParam = ref<Recordable>({
   title: audioTitle.value
@@ -99,27 +132,13 @@ const submitCopyParam = ref<Recordable>({
   title: audioTitle.value
 })
 const boxFormItem = ref<InstanceType<typeof FormList>[]>([])
-const productOption = ref([
-  {
-    text: '编辑',
-    style: {
-      backgroundColor: '#4e96f5'
-    }
-  },
-  {
-    text: '删除',
-    style: {
-      backgroundColor: '#810101'
-    }
-  }
-])
 const editProductStatus = ref(false)
 const modalStatus = ref(0) 
 const swipeActionIndex = ref(0)
 const editModelInfo = ref<Recordable>([])
 const videoScript = ref<VideoScript[]>([])
 const activeVideoItem = ref(-1)
-const swipeActionItems = ref<any>(null)
+const entityStatus = ref(false)
 
 const getFormItems = (el:any) => {
   if(el) {
@@ -170,7 +189,7 @@ const handleSubmit = () => {
       }
       return
     }
-    if([1,2,3].includes(stepIndex.value) && textInfo.value.key !== 'video') {
+    if([1,2,3,4].includes(stepIndex.value) && textInfo.value.key !== 'video') {
       if([1,2].includes(stepIndex.value)) {
         validAllForms(() => {
           if(stepIndex.value == textInfo.value?.steps?.length! - 1) {
@@ -180,13 +199,21 @@ const handleSubmit = () => {
           }
         })
       }else {
-        if(submitLiveParam.value.products.length == 0) {
-          return uni.showToast({
-            title: '至少添加一个产品',
-            icon: 'none',
+        if(stepIndex.value == 3) {
+          
+          if(submitLiveParam.value.products.length == 0) {
+            return uni.showToast({
+              title: `至少添加一个${entityStatus.value ? '套餐' : '产品'}`,
+              icon: 'none',
+            })
+          }
+          boxFormItem.value = []
+          stepIndex.value++
+        }else {
+          validAllForms(() => {
+            getChatText()
           })
         }
-        getChatText()
       }
       return
     }
@@ -195,11 +222,14 @@ const handleSubmit = () => {
       generateStore.setTextContent(videoScript.value[activeVideoItem.value].script_content)
       generateStore.setTextKey(textInfo.value?.key!)
       generateStore.setTextContinueId(-1)
+      generateStore.resetRolesList()
       generateStore.setRolesList({
         index: 0,
         label: '当前'
       })
-      uni.navigateBack()
+      uni.switchTab({
+        url: '/pages/generate/index'
+      })
       return
     }
   }else {
@@ -211,13 +241,51 @@ const handleSubmit = () => {
   }
 }
 
+const filterObj = (obj:any) => {
+  for(const key in obj) {
+    if(!obj[key]) {
+      delete obj[key]
+    }
+    if(typeof obj[key] == 'object') {
+      filterObj(obj[key])
+    }
+  }
+}
+
 const getChatText = () => {
   uni.showLoading({
     title: '生成中',
     mask: true
   })
-  const api = textInfo.value?.key == 'live' ? chatLivemsg : textInfo.value?.key == 'reply' ? chatReplymsg : chatCopymsg
-  const param = textInfo.value?.key == 'live' ? submitLiveParam.value : textInfo.value?.key == 'reply' ? submitReplyParam.value : submitCopyParam.value
+  const api = textInfo.value?.key == 'live' ? chat_live : textInfo.value?.key == 'reply' ? chatReplymsg : chatCopymsg
+  let param = {}
+  if(textInfo.value?.key == 'live') {
+    const obj = JSON.parse(JSON.stringify(submitLiveParam.value))
+    if(entityStatus.value) {
+      obj.shope = {
+        name: obj.enterprise.shopName,
+        indnstry: obj.enterprise.shopIndnstry,
+        address: obj.enterprise.shopAddress
+      }
+      obj.set_meal = obj.products.map((el:any) => {
+        return {
+          name: el.setMealName,
+          url_txt: el.setMealLink,
+          described: el.setMealDescribe,
+          price: el.setMealPrice,
+          discount: el.setMealDiscount
+        }
+      })
+      delete obj.enterprise
+      delete obj.products
+    }
+    param = obj
+  }else if(textInfo.value?.key == 'reply') {
+    param = submitReplyParam.value
+  }else {
+    param = submitCopyParam.value
+  }
+  filterObj(param)
   api(param).then((res:any) => {
     if(res?.message == 'error') {
       return uni.showToast({
@@ -238,34 +306,41 @@ const getChatText = () => {
         title: `${res.data.data}`,
         icon: 'none',
       })
-      stepIndex.value = 0
-      formData.value = []
-      submitLiveParam.value.products = []
-      submitLiveParam.value.roles = []
-      submitLiveParam.value.enterprise = []
+      // stepIndex.value = 0
+      // formData.value = []
+      // submitLiveParam.value.products = []
+      // submitLiveParam.value.roles = []
+      // submitLiveParam.value.enterprise = []
       return
+    }
+    if(res.status == 300) {
+      return uni.showToast({
+        title: `${res.message}`,
+        icon: 'error',
+        mask: true
+      })
     }
     generateStore.setTextStatus(true)
     generateStore.setTextContent(res.data.data)
     generateStore.setTextContinueId(res.data.id)
     generateStore.setTextKey(textInfo.value?.key!)
-    if(textInfo.value?.key == 'live') {
+    if(textInfo.value?.key == 'live' && submitLiveParam.value.roles.length > 1) {
+      generateStore.clearRolesList()
       submitLiveParam.value.roles.map((el:any,key:number) => {
-        if(el[0]) {
-          generateStore.setRolesList({
-            index: key,
-            label: el[0],
-            prop: submitLiveParam.value.roles.length
-          })
+        if(el.role) {
+          generateStore.pushRolesList(key,el.role)
         }
       })
     }else {
+      generateStore.resetRolesList()
       generateStore.setRolesList({
         index: 0,
         label: '当前'
       })
     }
-    uni.navigateBack()
+    uni.switchTab({
+      url: '/pages/generate/index'
+    })
   }).finally(() => {
     uni.hideLoading()
   })
@@ -277,25 +352,45 @@ const validAllForms = (callBacks?:() => void) => {
     Promise.all(validResult.value).then((res) => {
       if(textInfo.value?.key == 'live') {
         res.map(el => {
-          const arr = []
-          for(const key in el) {
-            arr.push(el[key] ? el[key] : '无')
+          for(const key in el){
+            if(el[key] == '本地生活') {
+              entityStatus.value = true
+            }
           }
-          if(el.labelInfo && stepIndex.value == 1) {
-            submitLiveParam.value.roles.push(arr)
+          if(el.role && stepIndex.value == 1) {
+            submitLiveParam.value.roles.push(el)
           }
           if([2,3].includes(stepIndex.value)) {
             if(stepIndex.value == 2) {
-              submitLiveParam.value.enterprise = arr
+              submitLiveParam.value.enterprise = el
             }else {
               if(modalStatus.value == 0) {
-                submitLiveParam.value.products[swipeActionIndex.value] = arr
+                submitLiveParam.value.products[swipeActionIndex.value] = el
               }else {
-                submitLiveParam.value.products.push(arr)
+                submitLiveParam.value.products.push(el)
               }
             }
           }
         })
+        if(stepIndex.value == 4) {
+          let bool = false
+          for(const key in res[0]) {
+            if(res[0][key]) {
+              bool = true
+            }
+          }
+          if(!bool) {
+            return uni.showToast({
+              title: '至少填写一项',
+              icon: 'none'
+            })
+          }
+          if(res[0].customScriptStyle) {
+            submitLiveParam.value.script_style = res[0].customScriptStyle
+          }else {
+            submitLiveParam.value.script_style = res[0].script_style
+          }
+        }
       }else if(textInfo.value?.key == 'reply') {
         submitReplyParam.value.reply_type = res[0].labelInfo == '产品回复' ? 1 : 2
         submitReplyParam.value.prompt = res[0].replyContent
@@ -305,16 +400,16 @@ const validAllForms = (callBacks?:() => void) => {
         submitCopyParam.value.copy_style = res[0].style
       }
       callBacks && callBacks()
-      textInfo.value?.steps && stepIndex.value < textInfo.value?.steps.length - 1 && stepIndex.value++ && (boxFormItem.value = [])
+      textInfo.value?.steps && stepIndex.value !== 3 && stepIndex.value < textInfo.value?.steps.length - 1 && stepIndex.value++ && (boxFormItem.value = [])
     }).finally(() => {
       generateStore.clearValidResult()
     })
   }
 }
 
-const handleSwipeAction = (val:any,key:number) => {
+const handleSwipeAction = (status:string,key:number) => {
   swipeActionIndex.value = key
-  if(val.index == 0) {
+  if(status == 'edit') {
     modalStatus.value = 0
     editModelInfo.value = submitLiveParam.value.products[swipeActionIndex.value]
     editProductStatus.value = true
@@ -332,9 +427,6 @@ const handleModalEdit = (status:string) => {
   if(status == 'confirm') {
     validAllForms(() => {
       editProductStatus.value = false
-      if(swipeActionItems.value && modalStatus.value == 0) {
-        swipeActionItems.value[swipeActionIndex.value]?.closeHandler()
-      }
       console.log(submitLiveParam.value,'finally');
     })
   }else {
@@ -345,12 +437,15 @@ const handleModalEdit = (status:string) => {
 </script>
 
 <style lang="scss" scoped>
+.textPage {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(223, 254, 155, 1) 0%, rgba(245, 250, 234, 1) 100%);
+}
 .selectItem {
   @include flexCenter();
-  box-sizing: border-box;
 }
 .activeItem {
-  border: 2rpx solid skyblue;
+  background: rgba(182, 239, 18, 1);
 }
 .videoTextItem {
   font-size: 26rpx;
@@ -375,11 +470,113 @@ const handleModalEdit = (status:string) => {
     border-bottom: 2rpx solid #b8b7b7;
   }
 }
+.productItem {
+  height: 188rpx;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0rpx 8rpx 16rpx  rgba(0, 0, 0, 0.04);
+  justify-content: space-between;
+  .names {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .productBtns {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+  }
+  .productBtn {
+    width: 120rpx;
+    height: 62rpx;
+    border-radius: 442rpx;
+    background: rgba(32, 32, 40, 1);
+    font-size: 28rpx;
+    color: #fff;
+    &:nth-of-type(2){
+      background: rgba(244, 245, 248, 1);
+      color: rgba(32, 32, 40, 1);
+    }
+  }
+}
 .addProduct {
-  height: 80rpx;
+  height: 96rpx;
   @include flexCenter();
-  margin-top: 40rpx;
-  border: 2rpx solid #c94545;
-  border-radius: 10rpx;
+  background: url('@/static/image/generate/addBtn.png') no-repeat;
+  background-size: 100% 100%;
+}
+::v-deep .activeStep {
+  .u-steps-item__wrapper__dot {
+    background: $base-background!important;
+  }
+}
+::v-deep .activeStepLine {
+  .u-steps-item__line--row {
+    background: $base-background!important;
+  }
+}
+.progress {
+  background: #fff;
+  padding: 48rpx 0;
+  border-radius: 16rpx;
+  margin-bottom: 16rpx;
+}
+::v-deep .customStep {
+  flex-direction: column-reverse!important;
+  .u-text__value--content, .u-text__value--main {
+    font-size: 24rpx!important;
+    color: rgba(11, 11, 11, 0.5);
+    width: 96rpx;
+    height: 86rpx;
+    text-align: center;
+  }
+  .u-text__value--main {
+    color: rgba(11, 11, 11, 1);
+  }
+  .u-steps-item__line--row {
+    top: unset;
+    bottom: 10px;
+  }
+}
+.contentArea {
+  padding-bottom: 270rpx;
+}
+.users {
+  @include domSize(160rpx,160rpx);
+  position: absolute;
+  right: 48rpx;
+  bottom: 0;
+}
+.fixedBtn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 80rpx 32rpx;
+  width: 100%;
+  .customBtns {
+    height: 96rpx;
+    color: #fff;
+    border-radius: 48rpx;
+    background: rgba(31, 31, 41, 1);
+  }
+}
+.formArea {
+  box-shadow: 0rpx 8rpx 16rpx  rgba(0, 0, 0, 0.04);
+  border-radius: 16rpx;
+  background: #fff;
+}
+.hexagon {
+  position: relative;
+  @include domSize(42rpx,48rpx);
+  background: url('@/static/image/generate/hexagon.png') no-repeat;
+  background-size: 100% 100%;
+  @include flexCenter();
+  margin-right: 16rpx;
+  .text {
+    font-size: 24rpx;
+    font-weight: bold;
+  }
 }
 </style>

@@ -15,6 +15,7 @@ const routerToPremission = () => {}
       :is-back="false"
       :title-bold="true"
       title="系统设置"
+      class="font-bold"
     >
     </u-navbar>
     <view class="content-box">
@@ -22,8 +23,8 @@ const routerToPremission = () => {}
         <template #value>
           <u-switch
             size="20"
-            activeColor="#16162e"
             v-model="isOpenMessage"
+            :class="{'activeSwitch':isOpenMessage}"
           ></u-switch>
         </template>
       </u-cell>
@@ -47,5 +48,10 @@ const routerToPremission = () => {}
   .button-box {
     display: flex;
   }
+}
+
+::v-deep .activeSwitch {
+  background-color: unset!important;
+  background: $base-background;
 }
 </style>
