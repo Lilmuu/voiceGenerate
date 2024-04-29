@@ -2,7 +2,7 @@
   <view class="flex-1">
     <view class="flex items-center pr-20rpx voiceItems" v-for="(item, index) in voiceData" :key="index"
       :style="{ 'height': menuStatus ? '200rpx' : '180rpx'}" :class="{'menuItems': menuStatus,'activeMenuItem': item.soundColorId == rolesActId}">
-      <view class="avatars w-96rpx h-96rpx border-rd-50% relative">
+      <view class="w-96rpx h-96rpx border-rd-50% relative" :class="{'avatars': item.auditionSound != '0'}">
         <template v-if="item.audioStatus == 'pause'">
           <view class="auidoPlaying1 elCenters"></view>
           <view class="auidoPlaying2 elCenters"></view>
@@ -11,7 +11,7 @@
         <view class="w-90rpx h-90rpx border-rd-50% bg-#fff elCenters">
           <image :src="item.soundCharacterImage" class="w-100% h-100% border-rd-50%" mode="aspectFit" />
         </view>
-        <image :src="item.audioStatus == 'play' ? playUrl : pauseUrl" class="w-56rpx h-56rpx elCenters" @click="handleAudio(index,item.audioStatus,item.auditionSound)"/>
+        <image v-if="item.auditionSound != '0'" :src="item.audioStatus == 'play' ? playUrl : pauseUrl" class="w-56rpx h-56rpx elCenters" @click="handleAudio(index,item.audioStatus,item.auditionSound)"/>
       </view>
       <view class="ml-50rpx flex-1 w-120rpx">
         <view class="font-bold textEllipsis mt-6rpx">{{ item.soundColorName }}</view>

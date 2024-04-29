@@ -42,6 +42,7 @@ export const useActionSheet = (title:any) => {
     handleSheet(false,() => {
       generateStore.setTextInfo(val)
       generateStore.setAudioTitle(title)
+      generateStore.setTextTitle('')
       uni.navigateTo({ url: '/pages/generate/text' })
     })
   }

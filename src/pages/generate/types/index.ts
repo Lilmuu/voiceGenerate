@@ -70,7 +70,9 @@ export type Form = {
   prop: string,
   type: string,
   propData?: string[] | PickerColumns[],
-  required?: boolean
+  required?: boolean,
+  height?: number,
+  maxlength?: number
 }
 
 export type SelectData = {
@@ -101,6 +103,11 @@ export interface VideoScript {
   id: number;
   script_content: Scriptcontent[];
   script_name: string;
+}
+
+export interface ReplyScript {
+  key: string;
+  content: string;
 }
 
 export interface Scriptcontent {

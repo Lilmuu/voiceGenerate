@@ -1,111 +1,89 @@
 import { TextGenerateList,FormParamObj } from "../types"
 
-const replyColumns = [[
-  {
-    label: '常规回复',
-    id: 0
-  },
-  {
-    label: '学术型',
-    id: 1
-  },
-  {
-    label: '幽默型',
-    id: 2
-  },
-  {
-    label: '争论好辩型',
-    id: 3
-  },
-  {
-    label: '创造力型',
-    id: 4
-  },
-  {
-    label: '新闻型',
-    id: 5
-  },
-  {
-    label: '诗意型',
-    id: 6
-  },
-  {
-    label: '技术型',
-    id: 7
-  }
-]]
-
-const replyFormObj:FormParamObj = {
+export const replyFormObj:FormParamObj = {
   form: [
     {
-      label: '回复内容',
-      prop: 'replyContent',
+      label: '关键词',
+      prop: 'key',
       required: true,
       type: 'input'
     },
     {
-      label: '回复风格',
-      prop: 'style',
+      label: '内容',
+      prop: 'content',
       required: true,
-      type: 'picker',
-      propData: replyColumns
-    }
+      type: 'textarea'
+    },
   ],
   rules: {
-    'replyContent': {
+    'key': {
       type: 'string',
       required: true,
-      message: '请填写回复内容',
+      message: '请填写关键词',
       trigger: ['blur']
     },
-    'style': {
+    'content': {
       type: 'string',
       required: true,
-      message: '请选择回复风格',
-      trigger: ['blur', 'change']
-    },
+      message: '请填写内容',
+      trigger: ['blur']
+    }
   }
 }
 
+export const reWriteFormObj:FormParamObj = {
+  form: [
+    {
+      label: '洗稿要求描述',
+      prop: 'prompt',
+      required: true,
+      height: 150,
+      maxlength: 500,
+      type: 'textarea'
+    }
+  ],
+  rules: {
+    'prompt': {
+      type: 'string',
+      required: true,
+      message: '请填写洗稿要求描述',
+      trigger: ['blur']
+    }
+  }
+}
+
+
 const textColumns = [[
   {
-    label: '新闻风格',
+    label: '武侠风',
     id: 0
   },
   {
-    label: '文艺风格',
+    label: '文学风',
     id: 1
   },
   {
-    label: '广告营销风格',
+    label: '浪漫主义',
     id: 2
   },
   {
-    label: '故事风格',
+    label: '相声风',
     id: 3
   },
   {
-    label: '诗歌风格',
+    label: '美食介绍风',
     id: 4
   },
   {
-    label: '接地气风格',
+    label: '常规',
     id: 5
-  },
-  {
-    label: '治愈系风格',
-    id: 6
-  },
-  {
-    label: '沙雕风格',
-    id: 7
-  },
+  }
 ]]
 
 const textFormObj:FormParamObj = {
   form: [
     {
-      label: '文案内容',
+      label: '文案选题',
       prop: 'textContent',
       required: true,
       type: 'input'
@@ -116,20 +94,33 @@ const textFormObj:FormParamObj = {
       required: true,
       type: 'picker',
       propData: textColumns
-    }
+    },
+    {
+      label: '自定义风格',
+      prop: 'customStyle',
+      type: 'input'
+    },
+    {
+      label: '文案描述',
+      prop: 'textDescribe',
+      required: true,
+      height: 200,
+      maxlength: 500,
+      type: 'textarea'
+    },
   ],
   rules: {
     'textContent': {
       type: 'string',
       required: true,
-      message: '请填写文案内容',
+      message: '请填写文案选题',
       trigger: ['blur']
     },
-    'style': {
+    'textDescribe': {
       type: 'string',
       required: true,
-      message: '请选择文案风格',
-      trigger: ['blur', 'change']
+      message: '请填写文案描述',
+      trigger: ['blur']
     },
   }
 }
@@ -160,6 +151,7 @@ export const textGenerateList: TextGenerateList[] = [
             label: '直播风格',
             prop: 'role_type',
             type: 'picker',
+            required: true,
             propData: [[
               {
                 label: '本地生活',
@@ -195,6 +187,12 @@ export const textGenerateList: TextGenerateList[] = [
             type: 'string',
             required: true,
             message: '请选择性别',
+            trigger: ['blur', 'change']
+          },
+          'role_type': {
+            type: 'string',
+            required: true,
+            message: '请选择直播风格',
             trigger: ['blur', 'change']
           },
         }
@@ -496,23 +494,23 @@ export const textGenerateList: TextGenerateList[] = [
             required: true,
             type: 'input'
           },
-          {
-            label: '套餐链接',
-            prop: 'setMealLink',
-            type: 'input'
-          },
+          // {
+          //   label: '套餐链接',
+          //   prop: 'setMealLink',
+          //   type: 'input'
+          // },
           {
             label: '套餐描述',
             prop: 'setMealDescribe',
             type: 'input'
           },
           {
-            label: '套餐价格',
+            label: '套餐原价',
             prop: 'setMealPrice',
             type: 'input'
           },
           {
-            label: '优惠力度',
+            label: '套餐惠价',
             prop: 'setMealDiscount',
             type: 'input'
           }
@@ -535,28 +533,7 @@ export const textGenerateList: TextGenerateList[] = [
             label: '脚本风格',
             prop: 'script_style',
             type: 'picker',
-            propData: [[
-              {
-                label: '武侠风',
-                id: 0
-              },
-              {
-                label: '文学风',
-                id: 1
-              },
-              {
-                label: '浪漫主义',
-                id: 2
-              },
-              {
-                label: '相声风',
-                id: 3
-              },
-              {
-                label: '美食介绍风',
-                id: 4
-              }
-            ]]
+            propData: textColumns
           },
           {
             label: '自定义脚本风格',
@@ -590,20 +567,24 @@ export const textGenerateList: TextGenerateList[] = [
     key: 'reply',
     selectData: [
       {
-        label: '产品回复',
-        ...replyFormObj
+        label: '互动回复',
       },
       {
-        label: '地址回复',
-        ...replyFormObj
-      }
+        label: '门店信息回复',
+      },
+      {
+        label: '套餐回复',
+      },
+      {
+        label: '政策回复',
+      },
     ],
     steps: [
       {
         label: '选择类型'
       },
       {
-        label: '选择风格'
+        label: '选择回复'
       }
     ]
   },
@@ -612,8 +593,37 @@ export const textGenerateList: TextGenerateList[] = [
     key: 'text',
     selectData: [
       {
-        label: '文案脚本',
+        label: '生成文本',
         ...textFormObj
+      },
+      {
+        label: '导入文案',
+        form: [
+          {
+            label: '文案内容',
+            prop: 'textDescribe',
+            required: true,
+            height: 200,
+            maxlength: 500,
+            type: 'textarea'
+          }
+        ],
+        rules: {
+          'textDescribe': {
+            type: 'string',
+            required: true,
+            message: '请填写文案内容',
+            trigger: ['blur']
+          }
+        }
+      }
+    ],
+    steps: [
+      {
+        label: '选择类型'
+      },
+      {
+        label: '填写信息'
       }
     ]
   },

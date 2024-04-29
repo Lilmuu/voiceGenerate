@@ -11,15 +11,15 @@
       </view>
     </view>
     <view class="chargeArea">
-      <view class="remind">
+      <view class="remind" :style="{'opacity': user.userInfo.hide ? '0' : '1'}">
         <view>
           <image src="@/static/image/mine/vip.png" class="w-80rpx h-31rpx" />
           <view class="flex-1 flex flex-justify-center">拥有硅灵会员专属权益</view>
-          <u-button class="chargeBtn" @click="showQR = true">充值</u-button>
+          <u-button class="chargeBtn" @click="!user.userInfo.hide && (showQR = true)">充值</u-button>
         </view>
       </view>
       <view class="list">
-        <view v-for="(item, index) in chargeList" :key="index" @click="jumpTo(item.path)">
+        <view v-for="(item, index) in user.userInfo.hide ? chargeList.filter((el,key) => key == 1) : chargeList" :key="index" @click="jumpTo(item.path)">
           <image :src="item.image" class="w-96rpx h-96rpx" />
           <view class="font-size-28rpx mt-4rpx">{{ item.label }}</view>
         </view>
@@ -97,12 +97,14 @@ const actionList = ref<ActionList[]>([
   {
     label: '用户协议',
     image: '/static/image/mine/icon_user.png',
-    key: 'user'
+    key: 'user',
+    path: 'privacyAndUser'
   },
   {
     label: '隐私协议',
     image: '/static/image/mine/icon_privacy.png',
-    key: 'privacy'
+    key: 'privacy',
+    path: 'privacyAndUser'
   },
   {
     label: '设置',
@@ -120,6 +122,7 @@ const showQR = ref(false)
 const showLogOut = ref(false)
 
 const jumpTo = (path: string) => {
+  if(!path) return
   uni.navigateTo({ url: path })
 }
 
@@ -128,7 +131,13 @@ const handleAction = (val:ActionList) => {
     showQR.value = true
   }else {
     if(val.path) {
-      uni.navigateTo({ url: val.path })
+      uni.navigateTo({ url: `${val.path}?key=${val.key}` })
+    }else {
+      uni.showToast({
+        title: '功能暂无',
+        icon: 'none',
+        mask: true
+      })
     }
   }
 }

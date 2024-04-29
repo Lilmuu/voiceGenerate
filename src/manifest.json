@@ -3,7 +3,7 @@
     "appid" : "__UNI__A00EE49",
     "description" : "",
     "versionName" : "1.0.0",
-    "versionCode" : "100",
+    "versionCode" : 100,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -21,6 +21,7 @@
                 "offset" : "none"
             }
         },
+        "runmode" : "liberate",
         "screenOrientation" : [ "portrait-primary" ],
         /* 模块配置 */
         "modules" : {},
@@ -86,6 +87,22 @@
                         "spotlight@2x" : "unpackage/res/icons/80x80.png",
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
+                }
+            }
+        },
+        "nativePlugins" : {
+            "JYFileTools" : {
+                "__plugin_info__" : {
+                    "name" : "JYFileTools模块",
+                    "description" : "JYFileTools",
+                    "platforms" : "iOS",
+                    "url" : "",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : false,
+                    "bought" : -1,
+                    "pid" : "",
+                    "parameters" : {}
                 }
             }
         }

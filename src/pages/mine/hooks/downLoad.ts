@@ -1,4 +1,6 @@
-import { getBatteryInfoSync } from "@/uni_modules/uni-getbatteryinfo";
+// #ifdef APP-PLUS
+const JYFileTools = uni.requireNativePlugin("JYFileTools");
+// #endif
 
 export const useDownLoadToLocal = () => {
   const downloadAndSaveMP3 = (base64: string, fileName: string) => {
@@ -56,29 +58,45 @@ export const useDownLoadToLocal = () => {
     })
   }
 
-  const downloadForIos = () => {
-    // var NSSearchPathForDirectoriesInDomains = plus.ios.newObject("NSSearchPathForDirectoriesInDomains");
-    // var NSDocumentDirectory = plus.ios.newObject("NSDocumentDirectory");
-    // var NSUserDomainMask = plus.ios.newObject("NSUserDomainMask");
-    // let docsdir = plus.ios.invoke(NSSearchPathForDirectoriesInDomains,'NSDocumentDirectory:NSUserDomainMask:',true)
-    // console.log(NSSearchPathForDirectoriesInDomains);
-    // var BundleClass = plus.ios.importClass("NSBundle");  
-    // var BundleObj = BundleClass.mainBundle();  
-    // var filenamagerobj = plus.ios.newObject("NSFileManager");  
-    // var FileAttr = plus.ios.invoke(filenamagerobj,"attributesOfFileSystemForPath:error:",BundleObj.bundlePath(),null);  
-    // console.log(FileAttr,'FileAttr');
-    // // NSFileSystemFreeSize 参数获取剩余空间  0
-    // // NSFileSystemSize  获取手机总存储空间  
-    // var freeSpace = plus.ios.invoke(FileAttr,"objectForKey:","NSFileSystemFreeSize");  
-    // console.log(freeSpace,'freeSpace');
-    // var numberFormatterObj = plus.ios.newObject("NSNumberFormatter");  
-    // console.log(numberFormatterObj,'numberFormatterObj');
-    // var FreeSpaceStr = plus.ios.invoke(numberFormatterObj,"stringFromNumber:",freeSpace);  
-    // console.log(FreeSpaceStr,'FreeSpaceStr');
-    // var freeSpaces = FreeSpaceStr / 1024/1024/1024;
-    // console.log(freeSpaces,'freeSpaces');
-    console.log(getBatteryInfoSync());
+  const downloadForIos = (url: string,fileName:string) => {
+    console.log(fileName);
     
+    const dtask = plus.downloader.createDownload(url,{
+      filename:fileName
+    },(d,status) => {
+      if(status == 200) {
+        if(d.filename) {
+          const fileSaveUrl = `file://${encodeURI(plus.io.convertLocalFileSystemURL(d.filename))}`
+          console.log(fileSaveUrl);
+          
+          JYFileTools.jy_saveFile({
+            "filePath": fileSaveUrl
+          }, (res:any) => {
+            console.log(res);
+          })
+        }
+      }else {
+        uni.showToast({
+          title: '下载失败',
+          icon: 'error',
+          mask: true
+        })
+      }
+    })
+    dtask.start()
+    // uni.downloadFile({
+    //   url,
+    //   success: ({ tempFilePath, statusCode }) => {
+    //     console.log('file://' + plus.io.convertLocalFileSystemURL(tempFilePath));
+        
+    //     JYFileTools.jy_saveFile({
+    //       "filePath": 'file://' + plus.io.convertLocalFileSystemURL(tempFilePath)
+    //     }, (res:any) => {
+    //       console.log(res);
+    //     })
+    //   },
+    //   fail: (error) => {}
+    // })
   }
 
   return {

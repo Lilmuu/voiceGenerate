@@ -25,9 +25,9 @@
         <u-checkbox class="mr-8rpx" :name="true" :shape="'circle'" activeColor="rgba(0, 171, 3, 1)"></u-checkbox>
       </u-checkbox-group>
       <view>我已阅读并同意</view>
-      <view class="color-#00ab03">《用户协议》</view>
+      <view class="color-#00ab03" @click="jumpTo('user')">《用户协议》</view>
       <view>和</view>
-      <view class="color-#00ab03">《隐私协议》</view>
+      <view class="color-#00ab03" @click="jumpTo('privacy')">《隐私协议》</view>
     </view>
   </view>
 </template>
@@ -127,6 +127,10 @@ const handleLogin = () => {
       url: '/pages/index/index'
     })
   })
+}
+
+const jumpTo = (key:string) => {
+  uni.navigateTo({ url: `/pages/mine/privacyAndUser?key=${key}` })
 }
 </script>
 

@@ -11,7 +11,8 @@ export type VoiceData = {
   soundColorId: number
   soundColorInfo: string
   soundColorName: string
-  soundColorType: string
+  soundColorType: string,
+  residual?: string
 }
 
 export interface HandleAudioParam {

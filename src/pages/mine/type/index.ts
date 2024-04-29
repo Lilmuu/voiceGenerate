@@ -6,7 +6,8 @@ export interface audioItem {
   id: number
   role: string
   text: string
-  audioStatus: AudioStauts
+  audioStatus: AudioStauts,
+  residual: string
 }
 
 export interface audioList {

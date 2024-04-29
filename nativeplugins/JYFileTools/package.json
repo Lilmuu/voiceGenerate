@@ -1,0 +1,23 @@
+{
+    "name": "JYFileTools模块",
+    "id": "JYFileTools",
+    "version": "1.0.0",
+    "description": "JYFileTools",
+    "_dp_type": "nativeplugin",
+    "_dp_nativeplugin": {
+        "ios": {
+            "plugins": [{
+                    "type": "module",
+                    "name": "JYFileTools",
+                    "class": "JYFileTools"
+                }
+            ],
+            "integrateType": "library",
+            "embedSwift": true,
+            "deploymentTarget": "11.0",
+            "validArchitectures": [
+                "arm64"
+            ]
+        }
+    }
+}

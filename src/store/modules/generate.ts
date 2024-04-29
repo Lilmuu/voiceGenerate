@@ -25,7 +25,8 @@ interface GenerateState {
   rolesList: RolesList[],
   defaultRolesList: RolesList[],
   rolesActIndex: number,
-  rolesActId: number
+  rolesActId: number,
+  textTitle: string
 }
 
 const useGenerateStore = defineStore('generate', {
@@ -41,7 +42,8 @@ const useGenerateStore = defineStore('generate', {
     rolesList: [],
     defaultRolesList: [],
     rolesActIndex: -1,
-    rolesActId: -1
+    rolesActId: -1,
+    textTitle: ''
   }),
   getters: {
     
@@ -98,6 +100,9 @@ const useGenerateStore = defineStore('generate', {
     },
     setRolesActId(id:number) {
       this.rolesActId = id
+    },
+    setTextTitle (str:string) {
+      this.textTitle = str
     },
     async getDefaultVoice() {
       const res = await queryTone({tone_type: 1}) as any

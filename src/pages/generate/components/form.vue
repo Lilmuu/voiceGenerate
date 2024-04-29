@@ -1,9 +1,12 @@
 <template>
   <view>
-    <u-form :model="modelForm" :rules="rules" labelPosition="left" :labelWidth="enterpriseState ? '240rpx' : '160rpx'" ref="cusForm">
+    <u-form :model="modelForm" :rules="rules" labelPosition="left" :labelWidth="formData.length > 1 ? enterpriseState ? '240rpx' : '160rpx' : 'auto'" ref="cusForm">
       <u-form-item v-for="(item, index) in formData" :key="index" :label="item.label" :prop="item.prop" :borderBottom="true" :required="item.required">
         <template v-if="item.type == 'input'">
           <u-input v-model="modelForm[item.prop]" border="none" :placeholder="`请输入${item.label}`"></u-input>
+        </template>
+        <template v-if="item.type == 'textarea'">
+          <u-textarea :maxlength="item.maxlength || -1" :count="item.maxlength ? true : false" border="none" v-model="modelForm[item.prop]" :placeholder="`请输入${item.label}`" :spellcheck="false" :height="item.height || ''"></u-textarea>
         </template>
         <template v-if="item.type == 'radio'">
           <u-radio-group v-model="modelForm[item.prop]" placement="row" activeColor="rgba(189, 254, 3, 1)">
@@ -41,10 +44,11 @@ const {
   handlePicker,
   pickerCancel,
   pickerConfirm,
-  validateForms
+  validateForms,
+  resetModelForm
 } = useForm(props.formData,props.labelInfo,props.editModelInfo)
 
-defineExpose({validateForms})
+defineExpose({validateForms,resetModelForm})
 </script>
 
 <style lang="scss" scoped>

@@ -1,4 +1,4 @@
-import { computed, onUnmounted, ref } from "vue"
+import { onUnmounted, ref } from "vue"
 import { PickerColumns,Form,FormRef } from "../types"
 import { useGenerateStore } from '@/store/index'
 
@@ -8,13 +8,15 @@ export const useForm = (formData:Form[],labelInfo?:string,editModelInfo?:Recorda
   const showPicker = ref(false)
   const pickerColumns = ref<PickerColumns[]>([])
   const cusForm = ref<FormRef | null>(null)
-  const modelForm = computed(() => {
-    const obj:Recordable = {}
+
+  const getModelForm = () => {
+    const obj = ref<Recordable>({})
     formData.map(val => {
-      obj[val.prop] = editModelInfo ? editModelInfo[val.prop] : ''
+      obj.value[val.prop] = editModelInfo ? editModelInfo[val.prop] : ''
     })
     return obj
-  })
+  }
+  const modelForm = getModelForm()
 
   const handlePicker = (propDatas:PickerColumns[]) => {
     pickerColumns.value = propDatas
@@ -48,6 +50,10 @@ export const useForm = (formData:Form[],labelInfo?:string,editModelInfo?:Recorda
     }
   }
 
+  const resetModelForm = (key:string,value:string) => {
+    modelForm.value[key] = value
+  }
+
   onUnmounted(() => {
     generateStore.clearValidResult()
   })
@@ -60,6 +66,7 @@ export const useForm = (formData:Form[],labelInfo?:string,editModelInfo?:Recorda
     handlePicker,
     pickerCancel,
     pickerConfirm,
-    validateForms
+    validateForms,
+    resetModelForm
   }
 }

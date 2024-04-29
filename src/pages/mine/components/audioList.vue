@@ -40,7 +40,8 @@ const queryAudioListAPI: () => Promise<void> = async () => {
         soundColorId: item.id,
         soundColorInfo: item.text,
         soundColorName: item.role,
-        audioStatus: 'play'
+        audioStatus: 'play',
+        residual: item.residual
       }
     })
     return list
@@ -64,6 +65,7 @@ const validPermission = (permissionID: string) => {
 
 // 下载音频
 const downLoadFileAPI = (url: string, title: string) => {
+  if(url == '0') return
   const platform = plus.os.name
   const filename = `${title}_${url.substring(url.lastIndexOf('/') + 1)}`
   if (platform === 'Android') {
@@ -120,7 +122,7 @@ const downLoadFileAPI = (url: string, title: string) => {
       })
     })
   } else {
-    downloadForIos()
+    downloadForIos(url,filename)
   }
 }
 
@@ -154,8 +156,8 @@ onMounted(() => {
           :class="{ 'activeCollapse': index === openCollapse }">
           <VoiceList :voiceData="item.data" @handleAudioList="handleAudioList">
             <template #btn="{ voiceItemData }">
-              <up-button class="customBtnDown"
-                @click="downLoadFileAPI(voiceItemData.auditionSound, item.title)">下载</up-button>
+              <up-button :class="voiceItemData.residual == '1' ? 'customBtnDown' : 'customLoadBtn'" :style="{'width': voiceItemData.residual == '0' ? '150rpx' : voiceItemData.residual == '1' ? '112rpx' : '164rpx'}"
+                @click="downLoadFileAPI(voiceItemData.auditionSound, item.title)">{{ voiceItemData.residual == '0' ? '生成中' : voiceItemData.residual == '1' ? '下载' : '生成失败' }}</up-button>
             </template>
           </VoiceList>
         </u-collapse-item>
@@ -220,9 +222,12 @@ onMounted(() => {
 }
 
 .customBtnDown {
-  width: 112rpx;
   height: 52rpx;
   border-radius: 444rpx;
   background: $base-background;
+}
+.customLoadBtn {
+  height: 52rpx;
+  border-radius: 444rpx;
 }
 </style>

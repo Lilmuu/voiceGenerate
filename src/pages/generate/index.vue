@@ -6,11 +6,11 @@
     </view>
   </view>
   <view class="pl-32rpx pr-32rpx pb-40rpx" :style="{'margin-top': !textKey ? '0' : `${safeAreaHeight}px`}">
-    <view class="mb-16rpx titlesName" :class="textKey ? 'mt-32rpx' : 'mt-8rpx'">填写标题</view>
+    <view class="mb-16rpx titlesName font-size-36rpx" :class="textKey ? 'mt-32rpx' : 'mt-8rpx'">填写标题</view>
     <view v-if="!textKey" class="color-#7e7f90 font-size-24rpx mb-32rpx">填写标题更好的标注生成内容</view>
-    <view class="relative" :class="textKey ? 'mb-20rpx' : 'mb-72rpx'">
+    <view class="relative" :class="textKey ? 'mb-20rpx' : 'mb-168rpx'">
       <u-textarea class="customText" :maxlength="20" :count="true" :border="'none'" v-model="title"
-        placeholder="请输入标题，20字内" :spellcheck="false" :height="textKey ? '96rpx' : '396rpx'"></u-textarea>
+        placeholder="请输入标题，20字内" :spellcheck="false" :height="textKey ? '96rpx' : '264rpx'"></u-textarea>
       <view class="clearText" @click="handleClearText">清空</view>
     </view>
     <u-button class="customBtnSave" text="生成文本" @click="handleSheet(true)"></u-button>
@@ -152,23 +152,23 @@ const {
     @include domSize(296rpx, 316rpx);
     position: absolute;
     bottom: 42rpx;
+    left: 38rpx;
   }
 
   .text {
     position: absolute;
     bottom: 60rpx;
-    width: calc(100% - 72rpx);
+    width: calc(100% - 60rpx);
 
     >uni-view {
       font-size: 28rpx;
-      font-weight: bold;
       width: 338rpx;
       height: 84rpx;
       line-height: 42rpx;
       position: absolute;
       top: 0;
       bottom: 0;
-      right: 10rpx;
+      right: 0;
       margin: auto;
     }
   }

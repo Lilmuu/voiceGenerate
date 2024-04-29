@@ -1,7 +1,7 @@
 import { storeToRefs } from 'pinia'
 import { useGenerateStore } from '@/store/index'
 import { ref, watch } from "vue"
-import { chat_live,chatReplymsg,chatCopymsg,saveAudio } from "@/api/modules/generate"
+import { chat_live, chatReplymsg, chatCopymsg, saveAudio } from "@/api/modules/generate"
 import { onLoad } from '@dcloudio/uni-app'
 import { testChatError } from "../hooks/config"
 
@@ -11,7 +11,7 @@ type generateModalParam = {
   index?: number
 }
 
-function chunkString(str:string, chunkSize:number) {
+function chunkString(str: string, chunkSize: number) {
   let chunks = [];
   for (let i = 0; i < str.length; i += chunkSize) {
     chunks.push(str.substr(i, chunkSize));
@@ -24,12 +24,13 @@ export const useGenerate = () => {
 
   const generateStore = useGenerateStore()
 
-  const { 
+  const {
     generateTextStatus,
     textContent,
     textKey,
     textContinueId,
-    rolesList
+    rolesList,
+    textTitle
   } = storeToRefs(generateStore)
 
   const textContentArr = ref<Recordable[]>([])
@@ -38,74 +39,79 @@ export const useGenerate = () => {
   const generateItem = ref<Recordable>({})
   const generateItemIndex = ref(-1)
 
-  watch(generateTextStatus,(newValue) => {
-    console.log(newValue,'backStatus');
-    if(newValue) {
+  watch(generateTextStatus, (newValue) => {
+    console.log(newValue, 'backStatus');
+    if (newValue) {
       setTimeout(() => {
-        if(generateTextStatus.value) {
-          textContentArr.value = []
-          if(['text','video'].includes(textKey.value) && !title.value) {
-            title.value = '文案'
-          }
-          console.log(title.value,'title');
-          handleSliceText()
-          generateStore.setTextStatus(false)
+        if (generateTextStatus.value) {
+          updateData()
         }
       }, 100);
     }
   })
 
   onLoad(() => {
-    console.log('load',1111);
-    if(generateTextStatus.value) {
+    console.log('load', 1111);
+    if (generateTextStatus.value) {
       setTimeout(() => {
-        if(generateTextStatus.value) {
-          textContentArr.value = []
-          if(['text','video'].includes(textKey.value) && !title.value) {
-            title.value = '文案'
-          }
-          handleSliceText()
-          generateStore.setTextStatus(false)
-        }
+        updateData()
       }, 100);
     }
   })
-  
+
+  const updateData = () => {
+    textContentArr.value = []
+    if (['text', 'video'].includes(textKey.value)) {
+      title.value = textTitle.value || '文案'
+    }
+    handleSliceText()
+    generateStore.setTextStatus(false)
+  }
+
   const handleSliceText = () => {
-    if(['text','reply'].includes(textKey.value)) {
-      if(typeof textContent.value !== 'string') return
+    if (textKey.value == 'text') {
+      if (typeof textContent.value !== 'string') return
       const str = JSON.parse(JSON.stringify(textContent.value))
-      str.split('\n').map((el:string) => {
-        if(el && el.trim()) {
-          textContentArr.value.push({
-            text: el
-          })
-        }
-      })
-    }else if(textKey.value == 'live') {
-      if(typeof textContent.value !== 'string') return
+      if(textTitle.value) {
+        str.split('\n').map((el: string) => {
+          if (el && el.trim()) {
+            textContentArr.value.push({
+              text: el
+            })
+          }
+        })
+      }else {
+        textContentArr.value.push({
+          text: str
+        })
+      }
+    } else if (textKey.value == 'live') {
+      if (typeof textContent.value !== 'string') return
       const str = JSON.parse(JSON.stringify(textContent.value))
-      str.split('\n').map((el:any) => {
+      str.split('\n').map((el: any) => {
         let name = ''
-        if(el.indexOf(':') !== -1) {
-          name = el.slice(0,el.indexOf(':') + 1)
+        if (el.indexOf(':') !== -1) {
+          name = el.slice(0, el.indexOf(':') + 1)
         }
-        if(el && el.trim()) {
-          textContentArr.value.push({ 
-            text: name ? el.replace(name,'') : el,
+        if (el && el.trim()) {
+          textContentArr.value.push({
+            text: name ? el.replace(name, '') : el,
             name
           })
         }
       })
-    }else if(textKey.value == 'customText') {
+    } else if (textKey.value == 'customText') {
       const str = JSON.parse(JSON.stringify(textContent.value))
-      textContentArr.value = chunkString(str,500).map(el => {
-        return {
-          text: el
-        }
-      })
-    }else {
-      if(typeof textContent.value !== 'object') return
+      // textContentArr.value = chunkString(str, 500).map(el => {
+      //   return {
+      //     text: el
+      //   }
+      // })
+      textContentArr.value = [{
+        text: str
+      }]
+    } else {
+      if (typeof textContent.value !== 'object') return
       textContent.value.map(el => {
         textContentArr.value.push({
           text: el.content,
@@ -113,25 +119,25 @@ export const useGenerate = () => {
         })
       })
     }
-    console.log(textContentArr.value,'mmmmmm')
+    console.log(textContentArr.value, 'mmmmmm')
   }
 
   const handleContinue = () => {
-    if(textContinueId.value !== -1) {
+    if (textContinueId.value !== -1) {
       uni.showLoading({
         title: '生成中',
         mask: true
       })
       const api = textKey.value == 'live' ? chat_live : textKey.value == 'reply' ? chatReplymsg : chatCopymsg
-      api({q_id:textContinueId.value}).then((res:any) => {
-        if(res?.message && res?.message == 'error') {
+      api({ q_id: textContinueId.value }).then((res: any) => {
+        if (res?.message && res?.message == 'error') {
           return uni.showToast({
             title: '生成失败',
             icon: 'error',
             mask: true
           })
         }
-        if(testChatError(res.data.data)) {
+        if (testChatError(res.data.data)) {
           return uni.showToast({
             title: `${res.data.data}`,
             icon: 'none',
@@ -145,29 +151,29 @@ export const useGenerate = () => {
     }
   }
 
-  const openGenerateModal = ({state,item,index}:generateModalParam) => {
-    if(!textContentArr.value.length) return uni.showToast({
+  const openGenerateModal = ({ state, item, index }: generateModalParam) => {
+    if (!textContentArr.value.length) return uni.showToast({
       title: '请先生成文本',
       icon: 'none',
       mask: true
     })
     showGenerateModal.value = true
     generateState.value = state
-    if(item) {
+    if (item) {
       generateItem.value = item
     }
-    if(index !== undefined) {
+    if (index !== undefined) {
       generateItemIndex.value = index
     }
   }
 
   const handleSaveAudio = () => {
     showGenerateModal.value = false
-    if(generateState.value == 'delete') {
-      textContentArr.value.splice(generateItemIndex.value,1)
+    if (generateState.value == 'delete') {
+      textContentArr.value.splice(generateItemIndex.value, 1)
       return
     }
-    if(generateState.value == 'reset') {
+    if (generateState.value == 'reset') {
       generateStore.resetRolesList()
       title.value = ''
       textContentArr.value = []
@@ -175,21 +181,21 @@ export const useGenerate = () => {
       generateStore.setTextKey('')
       return
     }
-    const param:Recordable = {
+    const param: Recordable = {
       title: title.value,
-      Text:[]
+      Text: []
     }
-    if(generateState.value == 'all') {
+    if (generateState.value == 'all') {
       textContentArr.value.map(el => {
         const obj = {
           text: el.text,
-          name:el.name,
+          name: el.name,
           soundColorId: rolesList.value.length > 1 ? rolesList.value.find(val => el.name.indexOf(val.label) !== -1)?.id : rolesList.value[0].id
         }
         param.Text.push(obj)
       })
-    }else {
-      if(!generateItem.value) return
+    } else {
+      if (!generateItem.value) return
       param.Text.push({
         text: generateItem.value.text,
         name: generateItem.value.name,
@@ -200,8 +206,8 @@ export const useGenerate = () => {
       title: '生成中',
       mask: true
     })
-    saveAudio(param).then((res:any) => {
-      if(res?.status_code == 304) {
+    saveAudio(param).then((res: any) => {
+      if (res?.status_code == 304) {
         return uni.showToast({
           title: `${res.message}`,
           icon: 'error',
@@ -213,7 +219,7 @@ export const useGenerate = () => {
         icon: 'success',
         mask: true
       })
-      
+
     }).catch(() => {
       uni.showToast({
         title: '生成失败',
@@ -225,7 +231,7 @@ export const useGenerate = () => {
     })
   }
 
-  const chooseTimbre = (id:number,index:number) => {
+  const chooseTimbre = (id: number, index: number) => {
     generateStore.setRolesActIndex(index)
     generateStore.setRolesActId(id)
     uni.navigateTo({
@@ -238,7 +244,7 @@ export const useGenerate = () => {
   }
 
   const jumpToCustomText = () => {
-    if(!title.value) return uni.showToast({
+    if (!title.value) return uni.showToast({
       title: '请先填写标题',
       icon: 'none'
     })

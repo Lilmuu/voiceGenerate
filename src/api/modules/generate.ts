@@ -55,3 +55,11 @@ export const queryTone = (data:Recordable) => {
     data
   })
 }
+
+export const replyQuery = (data:Recordable) => {
+  return http({
+    url: 'reply_query',
+    method: 'post',
+    data
+  })
+}

@@ -8,7 +8,7 @@ const clearUserStorages = () => {
   uni.showToast({
     title: `登录已过期，请重新登录`,
     icon: 'none',
-    position: 'bottom'
+    mask: true
   })
   uni.reLaunch({ url: '/components/loginAndRegister/index' })
 }
@@ -80,6 +80,12 @@ instance.interceptors.response.use((v:any) => {
   // @ts-ignore
   if ((v.status || v.statusCode) === 200) {
     return v.data
+  }else if ((v.status || v.statusCode) === 500) {
+    return uni.showToast({
+      title: '服务器错误',
+      icon: 'error',
+      mask: true
+    })
   }
   // alert(v.statusText, '网络错误')
   return Promise.reject(v)
