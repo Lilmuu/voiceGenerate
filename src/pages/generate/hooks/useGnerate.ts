@@ -214,12 +214,13 @@ export const useGenerate = () => {
           mask: true
         })
       }
-      uni.showToast({
-        title: '生成成功',
-        icon: 'success',
-        mask: true
-      })
-
+      if(res?.status_code == 200) {
+        uni.showToast({
+          title: '生成成功',
+          icon: 'success',
+          mask: true
+        })
+      }
     }).catch(() => {
       uni.showToast({
         title: '生成失败',

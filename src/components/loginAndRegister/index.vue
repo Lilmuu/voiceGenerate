@@ -10,16 +10,20 @@
           <text class="text">+86</text>
           <u-input :type="'number'" :maxlength="11" class="ml-16rpx" border="none" color="#0b0b0b" v-model="phone" placeholder="请输入手机号" :spellcheck="false"></u-input>
         </view>
-        <view class="loginForm">
+        <view class="loginForm" v-if="loginStatus">
           <u-input :type="'number'" :maxlength="4" border="none" color="#0b0b0b" v-model="smsCode" placeholder="请输入验证码" :spellcheck="false"></u-input>
           <view class="code" @click="getCode">{{ codeStatus ? '获取验证码' : `${countDown}秒后可获取` }}</view>
+        </view>
+        <view class="loginForm" v-if="!loginStatus">
+          <u-input border="none" color="#0b0b0b" v-model="password" placeholder="请输入密码" :spellcheck="false"></u-input>
         </view>
       </view>
     </view>
     <view class="pl-64rpx pr-64rpx">
       <u-button class="loginBtn" @click="handleLogin">立即登录</u-button>
-      <view class="font-size-28rpx text-center color-#7e7f90 mt-24rpx">未注册的手机号验证后即可完成注册</view>
+      <view :style="{'opacity': loginStatus ? '1' : '0'}" class="font-size-28rpx text-center color-#7e7f90 mt-24rpx">未注册的手机号验证后即可完成注册</view>
     </view>
+    <view class="font-size-28rpx text-center color-#7e7f90 mt-24rpx" @click="handleLoginStatus">{{ loginStatus ? '账号密码登录' : '短信验证码登录'}}</view>
     <view class="privacy">
       <u-checkbox-group v-model="checked">
         <u-checkbox class="mr-8rpx" :name="true" :shape="'circle'" activeColor="rgba(0, 171, 3, 1)"></u-checkbox>
@@ -43,9 +47,11 @@ const generateStore = useGenerateStore()
 
 const phone = ref('')
 const smsCode = ref('')
+const password = ref('')
 const checked = ref([false])
 const codeStatus = ref(true)
 const countDown = ref(60)
+const loginStatus = ref(true)
 
 const validPhone = () => {
   if(!phone.value) {
@@ -99,16 +105,31 @@ const getCode = () => {
 const handleLogin = () => {
   console.log(checked.value);
   
-  if(!validPhone()) return 
-  if(!smsCode.value) return uni.showToast({
-    title: '请先填写验证码',
-    icon: 'none',
-  })
+  if(!validPhone()) return
+  if(loginStatus.value) {
+    if(!smsCode.value) return uni.showToast({
+      title: '请先填写验证码',
+      icon: 'none',
+    })
+  }else {
+    if(!password.value) return uni.showToast({
+      title: '请填写密码',
+      icon: 'none',
+    })
+  }
   if(!checked.value[0]) return uni.showToast({
     title: '请先勾选并同意用户协议和隐私协议',
     icon: 'none',
   })
-  login({ phone: phone.value,code: smsCode.value }).then((res:any) => {
+  let param:Recordable = {
+    phone: phone.value
+  }
+  if(loginStatus.value) {
+    param.code = smsCode.value
+  }else {
+    param.password = password.value
+  }
+  login(param).then((res:any) => {
     if(res.status !== 200) return uni.showToast({
       title: `${res.message}`,
       icon: 'none',
@@ -127,6 +148,10 @@ const handleLogin = () => {
       url: '/pages/index/index'
     })
   })
+}
+
+const handleLoginStatus = () => {
+  loginStatus.value = !loginStatus.value
 }
 
 const jumpTo = (key:string) => {

@@ -38,16 +38,27 @@
   <view class="p-32rpx">
     <u-button class="logOut" @click="logOut">退出登录</u-button>
   </view>
-  <u-modal :show="showQR" title="联系客服" :showConfirmButton="false">
+  <u-modal :show="showQR" :showConfirmButton="false" class="customModal">
     <view class="w-100%">
-      <view class="flex flex-justify-center">
-        <image
-          class="w-400rpx h-400rpx"
-          src="@/static/image/mine/qrCode.png"
-          mode="scaleToFill"
-        />
+      <view class="flex flex-items-center mb-16rpx">
+        <image src="@/static/image/mine/memberIcon.png" class="w-48rpx h-48rpx mr-16rpx"/>
+        <text class="font-bold">请联系服务商</text>
       </view>
-      <view class="mt-40rpx">
+      <view class="color-#7e7f90 font-size-28rpx mb-48rpx">年度会员充值请联系服务商</view>
+      <view class="member relative">
+        <view class="content flex flex-items-center">
+          <view class="left">
+            <view class="font-bold font-size-36rpx tracking-2rpx">年度会员</view>
+            <view class="color-#7e7f90 font-size-24rpx mt-8rpx">约8.16元/天</view>
+          </view>
+          <view class="right">
+            <view class="color-#7e7f90 font-size-24rpx">限时特惠：</view>
+            <view class="money"><text>￥</text>2980</view>
+          </view>
+        </view>
+        <image src="@/static/image/mine/saleIcon.png" class="w-104rpx h-48rpx saleIcon"/>
+      </view>
+      <view class="mt-32rpx">
         <u-button class="modalBtn" @click="showQR = false">确定</u-button>
       </view>
     </view>
@@ -115,7 +126,8 @@ const actionList = ref<ActionList[]>([
   {
     label: '教程',
     image: '/static/image/mine/icon_course.png',
-    key: 'course'
+    key: 'course',
+    path: 'course'
   },
 ])
 const showQR = ref(false)
@@ -128,7 +140,12 @@ const jumpTo = (path: string) => {
 
 const handleAction = (val:ActionList) => {
   if(val.key == 'service') {
-    showQR.value = true
+    // showQR.value = true
+    uni.showToast({
+      title: '请联系服务商',
+      icon: 'none',
+      mask: true
+    })
   }else {
     if(val.path) {
       uni.navigateTo({ url: `${val.path}?key=${val.key}` })
@@ -250,7 +267,7 @@ const handleLogOut = () => {
     &:nth-last-of-type(1) {
       border-bottom: none;
     }
-    .u-cell__body {
+    ::v-deep .u-cell__body {
       height: 100%;
     }
   }
@@ -262,6 +279,46 @@ const handleLogOut = () => {
   box-shadow: 0rpx 17rpx 51rpx  rgba(242, 245, 233, 1);
   font-size: 28rpx;
   color: #fff;
+}
+.member {
+  .content {
+    background: url('@/static/image/mine/contentBg.png') no-repeat;
+    background-size: 100% 100%;
+    width: 100%;
+    height: 224rpx;
+    margin-bottom: 10rpx;
+    .left {
+      width: 220rpx;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+    }
+    .right {
+      @include flexCenter();
+      flex: 1;
+      border-left: 2rpx solid rgba(165, 214, 63, 1);
+      .money {
+        color: rgba(165, 214, 63, 1);
+        font-size: 60rpx;
+        font-weight: bold;
+        display: flex;
+        align-items: baseline;
+        >uni-text {
+          font-size: 40rpx;
+        }
+      }
+    }
+  }
+  .saleIcon {
+    position: absolute;
+    left: 0;
+    top: -24rpx;
+  }
+}
+::v-deep .customModal {
+  .u-modal__content {
+    padding: 32rpx;
+  }
 }
 </style>
 

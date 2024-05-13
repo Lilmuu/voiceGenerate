@@ -30,7 +30,7 @@
                 </view>
                 <view class="font-bold color-#282930">{{ item.label }}信息：</view>
               </view>
-              <FormList :ref="(el) => getFormItems(el)" :formData="item.form!" :rules="item.rules!"
+              <FormList :ref="getFormItems" :formData="item.form!" :rules="item.rules!"
                 :labelInfo="item.label"></FormList>
             </view>
           </view>
@@ -210,6 +210,7 @@ const getFormItems = (el: any) => {
       return boxFormItem.value[1] = el
     }
     if (textInfo.value?.key == 'text' && activeRole.value[0] == 1 && boxFormItem.value.length) return
+    if(boxFormItem.value.includes(el)) return
     boxFormItem.value.push(el)
   }
 }
@@ -359,24 +360,21 @@ const captrueExceptions = (res: any) => {
       mask: true
     })
     bool = true
-  }else if (res?.data?.data == 'error') {
-    uni.showToast({
-      title: '生成失败',
-      icon: 'error',
-      mask: true
-    })
-    bool = true
-  }else if (testChatError(res.data.data)) {
-    uni.showToast({
-      title: `${res.data.data}`,
-      icon: 'none',
-    })
-    // stepIndex.value = 0
-    // formData.value = []
-    // submitLiveParam.value.products = []
-    // submitLiveParam.value.roles = []
-    // submitLiveParam.value.enterprise = []
-    bool = true
+  }else if (res?.data) {
+    if(res?.data?.data == 'error') {
+      uni.showToast({
+        title: '生成失败',
+        icon: 'error',
+        mask: true
+      })
+      bool = true
+    }else if(testChatError(res.data.data)) {
+      uni.showToast({
+        title: `${res.data.data}`,
+        icon: 'none',
+      })
+      bool = true
+    }
   }else if (res.status == 300) {
     uni.showToast({
       title: `${res.message}`,
