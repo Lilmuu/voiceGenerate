@@ -4,7 +4,7 @@
       <image :src="user.userInfo.avatar" class="w-120rpx h-120rpx border-rd-50%" />
       <view class="userInfo">
         <view class="font-bold">{{ user.userInfo.nickname }}</view>
-        <view class="markInfo">
+        <view class="markInfo" v-if="!user.userInfo.hide">
           <image v-if="user.userInfo.user_type == '1'" src="@/static/image/mine/userMark.png" class="w-24rpx h-24rpx mr-6rpx" />
           <text>{{ user.userInfo.user_type == '1' ? 'VIP用户' : '普通用户' }}</text>
         </view>
@@ -28,7 +28,7 @@
   </view>
   <view class="actionLists">
     <u-cell-group :border="false">
-      <u-cell v-for="(item, index) in actionList" :key="index" :title="item.label" arrow-direction="right" isLink :border="false" @click="handleAction(item)">
+      <u-cell v-for="(item, index) in actionList.filter((val,key) => user.userInfo.hide ? key > 0 : val)" :key="index" :title="item.label" arrow-direction="right" isLink :border="false" @click="handleAction(item)">
         <template #icon>
           <image :src="item.image" class="w-48rpx h-48rpx" />
         </template>

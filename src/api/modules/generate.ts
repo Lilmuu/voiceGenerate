@@ -63,3 +63,10 @@ export const replyQuery = (data:Recordable) => {
     data
   })
 }
+
+export const delUser = () => {
+  return http({
+    url: '/del_user',
+    method: 'post'
+  })
+}

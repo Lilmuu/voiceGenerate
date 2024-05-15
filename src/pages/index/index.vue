@@ -2,7 +2,7 @@
   <view class="homePage pl-32rpx pr-32rpx" :style="{'height': `${pageHeight}px`}">
     <view class="h-840rpx"></view>
     <view class="content">
-      <image v-for="(item,index) in arr" :key="index" :src="item.image" class="w-328rpx h-252rpx mb-32rpx" @click="handleEvent(item.key)"/>
+      <image v-for="(item,index) in arr.filter((val,k) => user.userInfo.hide ? k < 3 : val)" :key="index" :src="item.image" class="w-328rpx h-252rpx mb-32rpx" @click="handleEvent(item.key)"/>
     </view>
   </view>
   <u-action-sheet :safeAreaInsetBottom="true" :round="'56rpx'" class="customActionSheet" :actions="sheetList.filter((val,key) => key > 1)" :closeOnClickOverlay="true"
@@ -13,7 +13,9 @@
 <script setup lang="ts">
 import { ref } from "vue"
 import { useActionSheet } from "../generate/hooks/useActionSheet"
+import { userStore } from '@/store/index'
 
+const user = userStore()
 const arr = [
   {
     image: '/static/image/homePage/voice.png',
